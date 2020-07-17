@@ -6,4 +6,4 @@ try:
 except KeyError:
     port = 7000
 
-scan_web.create_app(port).run()
+scan_web.create_app(port).run(host="0.0.0.0")
