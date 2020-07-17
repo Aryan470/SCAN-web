@@ -1,0 +1,66 @@
+<html>
+    <head>
+    <title>SCAN Bake Sale</title>
+    </head>
+
+    <body>
+        <h1>SCAN Bake Sale</h1>
+        <form action="/bakesale/submitorder">
+            <fieldset>
+                <legend>Cookies ($0.75 each, $8.00 per dozen)</legend>
+                <label for="cookie_chocchip">Chocolate Chip</label>
+                <input type="number" name="cookie_chocchip" min=0 step=1>
+                <br>
+                <label for="cookie_oatmeal">Oatmeal</label>
+                <input type="number" name="cookie_oatmeal" min=0 step=1>
+                <br>
+                <label for="cookie_sugar">Sugar Cookies</label>
+                <input type="number" name="cookie_sugar" min=0 step=1>
+                <br>
+                <label for="cookie_snickerdoodle">Snickerdoodles</label>
+                <input type="number" name="cookie_snickerdoodle" min=0 step=1>
+                <br>
+            </fieldset>
+            <fieldset>
+                <legend>Cupcakes ($1.75 each, $20 per dozen)</legend>
+
+                <label for="cupcake_redvelvet">Red Velvet</label>
+                <input type="number" name="cupcake_redvelvet" min=0 step=1>
+                <br>
+
+                <label for="cupcake_chocolate">Chocolate</label>
+                <input type="number" name="cupcake_chocolate" min=0 step=1>
+                <br>
+
+                <label for="cupcake_vanilla">Vanilla</label>
+                <input type="number" name="cupcake_vanilla" min=0 step=1>
+                <br>
+            </fieldset>
+            <fieldset>
+                <legend>Muffins ($1.50 each, $16 per dozen)</legend>
+
+                <label for="muffin_blueberry">Blueberry</label>
+                <input type="number" name="muffin_blueberry" min=0 step=1>
+                <br>
+
+                <label for="muffin_chocchip">Chocolate Chip</label>
+                <input type="number" name="muffin_chocchip" min=0 step=1>
+                <br>
+
+                <label for="muffin_bananawalnut">Banana Walnut</label>
+                <input type="number" name="muffin_bananawalnut" min=0 step=1>
+                <br>
+            </fieldset>
+            <fieldset>
+                <legend>Brownies ($1 each, $5 per half dozen)</legend>
+
+                <label for="brownies_brownie">Brownies</label>
+                <input type="number" name="brownies_brownie" min=0 step=1>
+                <br>
+            </fieldset>
+            <br>
+
+            <output name="price">Total Price: $0.00</output>
+        </form>
+    </body>
+</html>
