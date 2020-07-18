@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>SCAN Bake Sale Order (Baker View)</title>
+    </head>
+
+    <body>
+        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Baker View)</h1>
+        <h2>Order Info</h2>
+        <p><b>Status:</b> {{order.status}}</p>
+        <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
+        <p><b>Order ID:</b> {{order.orderID}}</p>
+        <h3>Ordered Items:</h3>
+        {% for category in order.fulfillment %}
+            <h5>{{names[category]}}</h5>
+            <ul>
+            {% for item in order.fulfillment[category] %}
+                <li>{{names[item]}}:
+                 {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
+                (<a href={{url_for("bakesale.bake_item", orderID=order.orderID, itemCategory=category,
+                itemID=item, qtyMax=(order.quantities[category][item] - order.fulfillment[category][item].count))}}>
+                Bake this</a>)</li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+
+        <h2>Customer Info</h2>
+        <p><b>Name:</b> {{order.userInfo.name}}</p>
+        <p><b>Phone Number:</b> {{order.userInfo.phone}}</p>
+        <p><b>Address:</b> {{order.userInfo.address}}</p>
+    </body>
+</html>
