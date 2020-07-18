@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort, jsonify, render_template
+from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
 from datetime import datetime
 from uuid import uuid4
 from scan_web import fireClient
@@ -102,12 +102,16 @@ def submitOrder():
         "quantities": quantities,
         "UTC_timestamp": str(datetime.utcnow()),
         "orderID": str(uuid4()),
-        "status": "received"
+        "status": {
+            "received": True,
+            "baked": False,
+            "delivered": False,
+        }
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
     # TODO: return link to order
-    return order
+    return redirect(url_for("order.%s" % order["orderID"]))
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
 def showOrder(orderID):
@@ -117,3 +121,20 @@ def showOrder(orderID):
         abort(404, "Order not found")
     
     return render_template("single_order.html", order=order_obj.to_dict(), names=nameLookup)
+
+@bakesale.route("/vieworders", methods=["GET"])
+def view_orders():
+    # check login
+#    if "authorized" not in session or not session["authorized"]:
+#        return redirect(url_for("login"))
+    
+    # load in all pending orders
+    pending_orders = fireClient.collection("orders").where()
+
+    # load in all baked orders
+    baked_orders = fireClient.collection("orders").where()
+
+    # load in all delivered orders
+    delivered_orders = fireClient.collection("orders").where()
+
+    return render_template("view_orders.html", pending=pending_orders, baked=baked_orders, delivered=delivered_orders)
