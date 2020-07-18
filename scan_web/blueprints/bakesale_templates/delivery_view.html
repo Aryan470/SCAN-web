@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>SCAN Delivery View</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Delivery View</h1>
+        <table border="1">
+            <caption><b>Baked Orders</b></caption>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Link</th>
+            </tr>
+
+            {% for order in baked %}
+                <tr>
+                    <td>{{order.UTC_timestamp.split()[0]}}</td>
+                    <td>{{order.userInfo.name}}</td>
+                    <td>{{order.userInfo.address}}</td>
+                    <td>{{order.userInfo.phone}}</td>
+                    <td><a href={{url_for("bakesale.showOrder", orderID=order.orderID, view="delivery")}}>Click Me</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>

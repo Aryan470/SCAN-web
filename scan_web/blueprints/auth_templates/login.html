@@ -63,12 +63,12 @@
                             }));
                             xhr.onreadystatechange = function () {
                                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                                    const stat = xhr.status;
+                                    const status = xhr.status;
                                     if (status === 0 || (status >= 200 && status < 400)) {
                                         // The request has been completed successfully
                                         window.location.href = "{{url_for("bakesale.index")}}";
                                     } else {
-                                        document.getElementById("errorText").value = "Error: " + xhr.responseText;
+                                        document.getElementById("errortext").value = "Error: " + xhr.responseText;
                                     }
                                 }
                             };

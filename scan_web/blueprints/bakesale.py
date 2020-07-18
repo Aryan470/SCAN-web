@@ -133,13 +133,20 @@ def showOrder(orderID):
         abort(404, "Order not found")
     
     view = request.args.get("view", default="customer")
-
-    if view == "baker":
-        return render_template("single_order_baker.html", order=order_obj.to_dict(), names=nameLookup)
-    elif view == "delivery":
-        return render_template("single_order.html", order=order_obj.to_dict(), names=nameLookup)
+    order_dict = order_obj.to_dict()
+    if order_dict["status"]["delivered"]:
+        order_dict["statusText"] = "Delivered"
+    elif order_dict["status"]["baked"]:
+        order_dict["statusText"] = "Baked"
     else:
-        return render_template("single_order.html", order=order_obj.to_dict(), names=nameLookup)
+        order_dict["statusText"] = "Received"
+
+    if "uid" in session and view == "baker":
+        return render_template("single_order_baker.html", order=order_dict, names=nameLookup)
+    elif "uid" in session and view == "delivery":
+        return render_template("single_order_delivery.html", order=order_dict, names=nameLookup)
+    else:
+        return render_template("single_order.html", order=order_dict, names=nameLookup)
 
 @bakesale.route("/bakerview", methods=["GET"])
 def baker_view():
@@ -150,13 +157,10 @@ def baker_view():
     # load in all pending orders
     pending_orders = fireClient.collection("orders").where("status.received", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()
 
-    # load in all baked orders
-    baked_orders = fireClient.collection("orders").where("status.baked", "==", True).where("status.delivered", "==", False).order_by("UTC_timestamp").stream()
-
     # load in all delivered orders
     delivered_orders = fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()
 
-    return render_template("baker_view.html", names=nameLookup, pending=[order.to_dict() for order in pending_orders], baked=[order.to_dict() for order in baked_orders], delivered=[order.to_dict() for order in delivered_orders])
+    return render_template("baker_view.html", names=nameLookup, pending=[order.to_dict() for order in pending_orders])
 
 @bakesale.route("/bakeitem", methods=["GET", "POST"])
 def bake_item():
@@ -206,6 +210,31 @@ def bake_item():
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.baker_view"))
 
+@bakesale.route("/deliveritem", methods=["GET", "POST"])
+def deliver_item():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    if request.method == "GET":
+        return render_template("delivery_form.html", orderID=request.args.get("orderID"),
+        address=request.args.get("address"), price=request.args.get("price"))
+
+    orderID = request.form["orderID"]
+    uid = session["uid"]
+    # simply mark as delivered
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    
+    order_dict = order_obj.to_dict()
+    order_dict["status"]["delivered"] = True
+    order_dict["delivery"] = {}
+    order_dict["delivery"]["deliveredBy"] = uid
+    order_dict["delivery"]["UTC_timestamp"] = datetime.utcnow()
+
+    order_ref.set(order_dict)
+    return redirect(url_for("bakesale.delivery_view"))
+
 @bakesale.route("/editprofile", methods=["GET", "POST"])
 def edit_profile():
     if "uid" not in session:
@@ -233,3 +262,17 @@ def edit_profile():
         user_ref.set(user_dict)
         return {"success": True}
 
+@bakesale.route("/deliveryview", methods=["GET"])
+def delivery_view():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    baked_orders = fireClient.collection("orders").where("status.baked", "==", True).where("status.delivered", "==", False).order_by("UTC_timestamp").stream()
+    return render_template("delivery_view.html", baked=[order.to_dict() for order in baked_orders])
+
+@bakesale.route("/adminview", methods=["GET"])
+def admin_view():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    return "work in progress"

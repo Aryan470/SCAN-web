@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>SCAN Baking Form</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Baking Form</h1>
+
+        <p>Are you sure you delivered this order to {{address}} and received ${{"%0.2f" % price|float()}}? Your user ID and the current time will be recorded.</p>
+        <p>Order ID: {{orderID}}</p>
+        <a href="{{url_for("bakesale.showOrder", orderID=orderID, view="delivery")}}">Link to order</p>
+        <form action="{{url_for("bakesale.deliver_item")}}" method="POST">
+            <input type="hidden" name="orderID" value={{orderID}}></input>
+            <input type="submit" value="Mark Delivered"></input>
+        </form>
+
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>
