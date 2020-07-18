@@ -83,4 +83,6 @@ def submitOrder():
         "orderID": str(uuid4())
     }
 
+    fireClient.collection("orders").document(order["orderID"]).set(order)
+    # TODO: return link to order
     return order
