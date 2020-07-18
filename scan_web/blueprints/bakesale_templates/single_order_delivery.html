@@ -1,25 +1,31 @@
 <html>
     <head>
-        <title>SCAN Bake Sale Order (Baker View)</title>
+        <title>SCAN Bake Sale Order (Delivery View)</title>
     </head>
 
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
-        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Baker View)</h1>
+        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Delivery View)</h1>
         <h2>Order Info</h2>
         <p><b>Status:</b> {{order.statusText}}</p>
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
+        <a href={{url_for("bakesale.deliver_item", orderID=order.orderID, address=order.userInfo.address, price=order.price)}}><h2>Deliver this</h2></a>
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
             <h5>{{names[category]}}</h5>
             <ul>
             {% for item in order.fulfillment[category] %}
                 <li>{{names[item]}}:
-                 {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
-                (<a href={{url_for("bakesale.bake_item", orderID=order.orderID, itemCategory=category,
-                itemID=item, qtyMax=(order.quantities[category][item] - order.fulfillment[category][item].count))}}>
-                Bake this</a>)</li>
+                    {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
+                    <ul>
+                        {% for baker in order.fulfillment[category][item].bakers %}
+                            <li>
+                                {{baker}}: {{order.fulfillment[category][item].bakers[baker]}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
             </ul>
         {% endfor %}
@@ -29,7 +35,7 @@
         <p><b>Phone Number:</b> {{order.userInfo.phone}}</p>
         <p><b>Address:</b> {{order.userInfo.address}}</p>
         <br><br>
-        <a href="{{url_for("bakesale.baker_view")}}">Back to baker view</a>
+        <a href="{{url_for("bakesale.delivery_view")}}">Back to delivery view</a>
         <br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>
