@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>SCAN Baking Form</title>
+    </head>
+    <body>
+        <h1>SCAN Baking Form</h1>
+
+        <p>You have requested to bake {{names[itemID]}} ({{names[itemCategory]}}) for order {{orderID}}</p>
+        <p>You can bake from anywhere between 1 and {{qtyMax}} of these, please specify the quantity below.</p>
+        <form action="{{url_for("bakesale.bake_item")}}" method="POST">
+            <input type="hidden" name="orderID" value={{orderID}}></input>
+            <input type="hidden" name="itemID" value={{itemID}}></input>
+            <input type="hidden" name="itemCategory" value={{itemCategory}}></input>
+            <input type="number" name="quantity" value=0 min=1 max={{qtyMax}} required></input>
+            <input type="submit" value="Bake This"></input>
+        </form>
+    </body>
+</html>
