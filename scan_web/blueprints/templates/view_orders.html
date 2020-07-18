@@ -4,17 +4,33 @@
     </head>
     <body>
         <h1>SCAN Orders View</h1>
-        <table>
-            <caption>Received Orders</caption>
+        <table border="1">
+            <caption><b>Received Orders</b></caption>
             <tr>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Link</th>
-                <th>Mark as Baked</th>
+                <th>Fulfillment</th>
             </tr>
 
             {% for order in pending %}
-                
+                <tr>
+                    <td>{{order.UTC_timestamp.split()[0]}}</td>
+                    <td>{{order.userInfo.name}}</td>
+                    <td><a href="{{url_for("bakesale.showOrder", orderID=order.orderID)}}">Click Me</a></td>
+                    <td>
+                        <ul>
+                            {% for category in order.fulfillment %}
+                                {% for item in order.fulfillment[category] %}
+                                    <li>
+                                        {{names[item]}} ({{names[category]}}):
+                                        {{order.fulfillment[category][item]}} / {{order.quantities[category][item]}}
+                                    </li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
             {% endfor %}
         </table>
     </body>
