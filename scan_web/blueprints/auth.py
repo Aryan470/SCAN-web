@@ -25,10 +25,10 @@ def login():
         abort(400, "Invalid ID token")
     
     session["uid"] = uid
-    #try:
-    session["name"] = fireClient.collection("users").document(uid).get().to_dict()["name"]
-    #except:
-    #    return redirect(url_for("bakesale.edit_profile"))
+    try:
+        session["name"] = fireClient.collection("users").document(uid).get().to_dict()["name"]
+    except:
+        return redirect(url_for("bakesale.edit_profile"))
     return redirect(url_for("bakesale.index"))
 
 @auth.route("/logout", methods=["GET"])
