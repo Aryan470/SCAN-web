@@ -74,6 +74,10 @@ nameLookup = {
 
 @bakesale.route("/", methods=["GET"])
 def index():
+    return render_template("index.html")
+
+@bakesale.route("/orderform", methods=["GET"])
+def orderform():
     return render_template("orderform.html")
 
 @bakesale.route("/submitorder", methods=["GET"])
@@ -140,8 +144,8 @@ def showOrder(orderID):
 @bakesale.route("/bakerview", methods=["GET"])
 def baker_view():
     # check login
-#    if "authorized" not in session or not session["authorized"]:
-#        return redirect(url_for("login"))
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
     
     # load in all pending orders
     pending_orders = fireClient.collection("orders").where("status.received", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()

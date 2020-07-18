@@ -25,5 +25,4 @@ def login():
     #    abort(400, "Invalid ID token")
     
     session["uid"] = uid
-    print("Logged in!")
     return redirect(url_for("bakesale.index"))
