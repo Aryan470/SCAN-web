@@ -49,6 +49,27 @@ userVars = [
     "phone",
     "address"
 ]
+nameLookup = {
+    "cookie": "Cookies",
+    "cupcake": "Cupcakes",
+    "muffin": "Muffins",
+    "brownie": "Brownies",
+
+    "cookie_chocchip": "Chocolate Chip",
+    "cookie_oatmeal": "Oatmeal",
+    "cookie_sugar": "Sugar Cookie",
+    "cookie_snickerdoodle": "Snickerdoodle",
+
+    "cupcake_redvelvet": "Red Velvet",
+    "cupcake_chocolate": "Chocolate",
+    "cupcake_vanilla": "Vanilla",
+
+    "muffin_blueberry": "Blueberry",
+    "muffin_chocchip": "Chocolate Chip",
+    "muffin_bananawalnut": "Banana Walnut",
+
+    "brownies_brownie": "Brownie"
+}
 
 
 @bakesale.route("/", methods=["GET"])
@@ -80,9 +101,19 @@ def submitOrder():
         "price": price,
         "quantities": quantities,
         "UTC_timestamp": str(datetime.utcnow()),
-        "orderID": str(uuid4())
+        "orderID": str(uuid4()),
+        "status": "received"
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
     # TODO: return link to order
     return order
+
+@bakesale.route("/order/<orderID>", methods=["GET"])
+def showOrder(orderID):
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    
+    return render_template("single_order.html", order=order_obj.to_dict(), names=nameLookup)
