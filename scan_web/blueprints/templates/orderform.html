@@ -5,62 +5,117 @@
 
     <body>
         <h1>SCAN Bake Sale</h1>
-        <form action="/bakesale/submitorder">
+        <script>
+            const cookiePrice = 0.75;
+            const cookieDozen = 8.00;
+            const cupcakePrice = 1.75;
+            const cupcakeDozen = 20.00;
+            const muffinPrice = 1.50;
+            const muffinDozen = 16.00;
+            const browniePrice = 1.00;
+            const brownieHalfDozen = 5.00;
+
+            function calcPrice() {
+                var numCookies = parseInt(document.querySelector("#cookie_chocchip").value)
+                    + parseInt(document.querySelector("#cookie_oatmeal").value)
+                    + parseInt(document.querySelector("#cookie_sugar").value)
+                    + parseInt(document.querySelector("#cookie_snickerdoodle").value);
+
+                var numCupcakes = parseInt(document.querySelector("#cupcake_redvelvet").value)
+                    + parseInt(document.querySelector("#cupcake_chocolate").value)
+                    + parseInt(document.querySelector("#cupcake_vanilla").value);
+                
+                var numMuffins = parseInt(document.querySelector("#muffin_blueberry").value)
+                    + parseInt(document.querySelector("#muffin_chocchip").value)
+                    + parseInt(document.querySelector("#muffin_bananawalnut").value);
+                
+                var numBrownies = parseInt(document.querySelector("#brownies_brownie").value);
+
+                var price = 0.00;
+                price += cookieDozen * Math.floor(numCookies / 12) + cookiePrice * (numCookies % 12);
+                price += cupcakeDozen * Math.floor(numCupcakes / 12) + cupcakePrice * (numCupcakes % 12);
+                price += muffinDozen * Math.floor(numMuffins / 12) + muffinPrice * (numMuffins % 12);
+                price += brownieHalfDozen * Math.floor(numBrownies / 6) + browniePrice * (numBrownies % 6);
+
+                if (isNaN(price)) {
+                    price = 0;
+                }
+                return "Total Price: $" + Math.round(price * 100) / 100;
+            }
+        </script>
+        <form action="/bakesale/submitorder" oninput="price.value=calcPrice()">
             <fieldset>
                 <legend>Cookies ($0.75 each, $8.00 per dozen)</legend>
                 <label for="cookie_chocchip">Chocolate Chip</label>
-                <input type="number" name="cookie_chocchip" min=0 step=1>
+                <input type="number" name="cookie_chocchip" min=0 step=1 id="cookie_chocchip" value=0>
                 <br>
                 <label for="cookie_oatmeal">Oatmeal</label>
-                <input type="number" name="cookie_oatmeal" min=0 step=1>
+                <input type="number" name="cookie_oatmeal" min=0 step=1 id="cookie_oatmeal" value=0>
                 <br>
                 <label for="cookie_sugar">Sugar Cookies</label>
-                <input type="number" name="cookie_sugar" min=0 step=1>
+                <input type="number" name="cookie_sugar" min=0 step=1 id="cookie_sugar" value=0>
                 <br>
                 <label for="cookie_snickerdoodle">Snickerdoodles</label>
-                <input type="number" name="cookie_snickerdoodle" min=0 step=1>
+                <input type="number" name="cookie_snickerdoodle" min=0 step=1 id="cookie_snickerdoodle" value=0>
                 <br>
             </fieldset>
             <fieldset>
                 <legend>Cupcakes ($1.75 each, $20 per dozen)</legend>
 
                 <label for="cupcake_redvelvet">Red Velvet</label>
-                <input type="number" name="cupcake_redvelvet" min=0 step=1>
+                <input type="number" name="cupcake_redvelvet" min=0 step=1 id="cupcake_redvelvet" value=0>
                 <br>
 
                 <label for="cupcake_chocolate">Chocolate</label>
-                <input type="number" name="cupcake_chocolate" min=0 step=1>
+                <input type="number" name="cupcake_chocolate" min=0 step=1 id="cupcake_chocolate" value=0>
                 <br>
 
                 <label for="cupcake_vanilla">Vanilla</label>
-                <input type="number" name="cupcake_vanilla" min=0 step=1>
+                <input type="number" name="cupcake_vanilla" min=0 step=1 id="cupcake_vanilla" value=0>
                 <br>
             </fieldset>
             <fieldset>
                 <legend>Muffins ($1.50 each, $16 per dozen)</legend>
 
                 <label for="muffin_blueberry">Blueberry</label>
-                <input type="number" name="muffin_blueberry" min=0 step=1>
+                <input type="number" name="muffin_blueberry" min=0 step=1 id="muffin_blueberry" value=0>
                 <br>
 
                 <label for="muffin_chocchip">Chocolate Chip</label>
-                <input type="number" name="muffin_chocchip" min=0 step=1>
+                <input type="number" name="muffin_chocchip" min=0 step=1 id="muffin_chocchip" value=0>
                 <br>
 
                 <label for="muffin_bananawalnut">Banana Walnut</label>
-                <input type="number" name="muffin_bananawalnut" min=0 step=1>
+                <input type="number" name="muffin_bananawalnut" min=0 step=1 id="muffin_bananawalnut" value=0>
                 <br>
             </fieldset>
             <fieldset>
                 <legend>Brownies ($1 each, $5 per half dozen)</legend>
 
                 <label for="brownies_brownie">Brownies</label>
-                <input type="number" name="brownies_brownie" min=0 step=1>
+                <input type="number" name="brownies_brownie" min=0 step=1 id="brownies_brownie" value=0>
                 <br>
             </fieldset>
             <br>
 
+            <fieldset>
+                <legend>Personal Info</legend>
+                <label for="name">Full Name: </label>
+                <input type="text" name="name" required>
+                <br>
+
+                <label for="phone">Phone Number: </label>
+                <input type="tel" name="phone" required>
+                <br>
+
+                <label for="address">Address: </label>
+                <input type="text" name="address" required>
+                <br>
+            </fieldset>
+
             <output name="price">Total Price: $0.00</output>
+            <br><br>
+            <input type="submit" value="Submit Order"></submit>
         </form>
     </body>
 </html>
