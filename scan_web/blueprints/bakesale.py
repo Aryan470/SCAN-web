@@ -260,7 +260,7 @@ def edit_profile():
             abort(400, "Malformed edit profile request")
         
         user_ref.set(user_dict)
-        return {"success": True}
+        return redirect(url_for("bakesale.index"))
 
 @bakesale.route("/deliveryview", methods=["GET"])
 def delivery_view():
