@@ -25,6 +25,7 @@ def login():
         abort(400, "Invalid ID token")
     
     session["uid"] = uid
+    session["name"] = "Click to setup profile"
     try:
         session["name"] = fireClient.collection("users").document(uid).get().to_dict()["name"]
     except:
