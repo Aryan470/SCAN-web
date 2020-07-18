@@ -61,6 +61,17 @@
                             xhr.send(JSON.stringify({
                                 "idToken": idToken
                             }));
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === XMLHttpRequest.DONE) {
+                                    const stat = xhr.status;
+                                    if (status === 0 || (status >= 200 && status < 400)) {
+                                        // The request has been completed successfully
+                                        window.location.href = "{{url_for("bakesale.index")}}";
+                                    } else {
+                                        document.getElementById("errorText").value = "Error: " + xhr.responseText;
+                                    }
+                                }
+                            };
                         }).catch(function(error) {
                             document.getElementById("errortext").value = "Error: " + error.message + " (" + error.code + ")";
                         });
@@ -87,5 +98,7 @@
                 }
             }
         </script>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
     </body>
 </html>

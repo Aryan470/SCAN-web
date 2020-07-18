@@ -4,6 +4,7 @@
     </head>
 
     <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Baker View)</h1>
         <h2>Order Info</h2>
         <p><b>Status:</b> {{order.status}}</p>
@@ -27,5 +28,9 @@
         <p><b>Name:</b> {{order.userInfo.name}}</p>
         <p><b>Phone Number:</b> {{order.userInfo.phone}}</p>
         <p><b>Address:</b> {{order.userInfo.address}}</p>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
     </body>
 </html>
