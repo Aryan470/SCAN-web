@@ -18,11 +18,11 @@ def login():
     except KeyError:
         abort(400, "Request must include id token from login page")
     
-    #try:
-    verified_dict = verify_id_token(idToken)
-    uid = verified_dict["uid"]
-    #except:
-    #    abort(400, "Invalid ID token")
+    try:
+        verified_dict = verify_id_token(idToken)
+        uid = verified_dict["uid"]
+    except:
+        abort(400, "Invalid ID token")
     
     session["uid"] = uid
     return redirect(url_for("bakesale.index"))
