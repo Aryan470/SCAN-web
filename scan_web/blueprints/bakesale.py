@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort, jsonify, render_template
+from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
 from datetime import datetime
 from uuid import uuid4
 from scan_web import fireClient
@@ -83,12 +83,16 @@ def submitOrder():
         userInfo[userVar] = request.args.get(userVar, default="N/A")
 
     quantities = {}
+    fulfillment = {}
     categorySums = {}
     price = 0
     for category in categories:
         quantities[category] = {}
+        fulfillment[category] = {}
         for item in categories[category]:
-            quantities[category][item] = request.args.get(item, default=0, type=int)
+            if request.args.get(item, default=0, type=int) > 0:
+                quantities[category][item] = request.args.get(item, default=0, type=int)
+                fulfillment[category][item] = 0
         categorySum = sum(quantities[category].values())
         for count in sorted(prices[category], reverse=True):
             if categorySum <= 0:
@@ -102,12 +106,17 @@ def submitOrder():
         "quantities": quantities,
         "UTC_timestamp": str(datetime.utcnow()),
         "orderID": str(uuid4()),
-        "status": "received"
+        "fulfillment": fulfillment,
+        "status": {
+            "received": True,
+            "baked": False,
+            "delivered": False,
+        }
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
     # TODO: return link to order
-    return order
+    return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
 def showOrder(orderID):
@@ -117,3 +126,20 @@ def showOrder(orderID):
         abort(404, "Order not found")
     
     return render_template("single_order.html", order=order_obj.to_dict(), names=nameLookup)
+
+@bakesale.route("/vieworders", methods=["GET"])
+def view_orders():
+    # check login
+#    if "authorized" not in session or not session["authorized"]:
+#        return redirect(url_for("login"))
+    
+    # load in all pending orders
+    pending_orders = fireClient.collection("orders").where("status.received", "==", True).order_by("UTC_timestamp").stream()
+
+    # load in all baked orders
+    baked_orders = fireClient.collection("orders").where("status.baked", "==", True).order_by("UTC_timestamp").stream()
+
+    # load in all delivered orders
+    delivered_orders = fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()
+
+    return render_template("view_orders.html", names=nameLookup, pending=[order.to_dict() for order in pending_orders], baked=[order.to_dict() for order in baked_orders], delivered=[order.to_dict() for order in delivered_orders])
