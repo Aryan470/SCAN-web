@@ -12,6 +12,7 @@ from scan_web.blueprints import bakesale, auth
 
 def create_app(port):
     app = Flask(__name__)
+    app.config["PREFERRED_URL_SCHEME"] = "https"
     if "SECRET_KEY" in os.environ:
         app.secret_key = os.environ["SECRET_KEY"]
     else:
@@ -19,7 +20,6 @@ def create_app(port):
 
     app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
     app.register_blueprint(auth.auth, url_prefix="/auth")
-
 
     @app.route("/")
     def index():
