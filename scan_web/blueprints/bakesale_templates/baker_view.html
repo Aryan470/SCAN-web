@@ -3,6 +3,7 @@
         <title>SCAN Baker View</title>
     </head>
     <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Baker View</h1>
         <table border="1">
             <caption><b>Received Orders</b></caption>
@@ -33,5 +34,9 @@
                 </tr>
             {% endfor %}
         </table>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
     </body>
 </html>

@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>SCAN Profile</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Profile Editor</h1>
+        <form action="{{url_for("bakesale.edit_profile")}}" method="POST">
+            <label for="name"><b>Name</b></label>
+            <input type="text" name="name" id="name" value="{{user.name}}" placeholder="Enter your name" required></input>
+            <br>
+            <label for="role"><b>Role</b></label>
+            <select name="role" id="role" required>
+                {% if user.role == "baker" %}
+                    <option value="baker" selected="selected">Baker</option>
+                {% else %}
+                    <option value="baker">Baker</option>
+                {% endif %}
+
+                {% if user.role == "delivery" %}
+                    <option value="delivery" selected="selected">Delivery</option>
+                {% else %}
+                    <option value="delivery">Delivery</option>
+                {% endif %}
+
+                {% if user.role == "both" %}
+                    <option value="both" selected="selected">Both</option>
+                {% else %}
+                    <option value="both">Both</option>
+                {% endif %}
+            </select>
+            <input type="hidden" name="uid" id="uid" value="{{user.uid}}"></input>
+            <br>
+            <input type="submit"></input>
+        </form>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>

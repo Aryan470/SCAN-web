@@ -160,6 +160,9 @@ def baker_view():
 
 @bakesale.route("/bakeitem", methods=["GET", "POST"])
 def bake_item():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+
     if request.method == "GET":
         return render_template("bake_form.html", names=nameLookup,
         orderID=request.args.get("orderID"), itemCategory=request.args.get("itemCategory"),
@@ -168,7 +171,7 @@ def bake_item():
     itemCategory = request.form["itemCategory"]
     itemID = request.form["itemID"]
     quantity = int(request.form["quantity"])
-    bakerID = "aryan"
+    bakerID = session["uid"]
 
     if orderID is None or itemCategory is None or itemID is None or quantity is None \
         or itemCategory not in categories or itemID in categories or itemID not in nameLookup:
@@ -202,3 +205,31 @@ def bake_item():
     order_dict["status"]["baked"] = allMet
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.baker_view"))
+
+@bakesale.route("/editprofile", methods=["GET", "POST"])
+def edit_profile():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    uid = session["uid"]
+    user_ref = fireClient.collection("users").document(uid)
+
+    if request.method == "GET":
+        user_obj = user_ref.get()
+        if user_obj.exists:
+            user_dict = user_obj.to_dict()
+        else:
+            user_dict = {"uid": uid}
+        return render_template("profile.html", user=user_dict)
+    else:
+        try:
+            user_dict = {}
+            user_dict["uid"] = request.form["uid"]
+            user_dict["name"] = request.form["name"]
+            user_dict["role"] = request.form["role"]
+        except:
+            abort(400, "Malformed edit profile request")
+        
+        user_ref.set(user_dict)
+        return {"success": True}
+
