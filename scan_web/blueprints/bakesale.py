@@ -4,7 +4,7 @@ from uuid import uuid4
 from scan_web import fireClient
 from uuid import uuid4
 
-bakesale = Blueprint("bakesale", __name__, template_folder="templates")
+bakesale = Blueprint("bakesale", __name__, template_folder="bakesale_templates")
 categories = {
     "cookie": [
         "cookie_chocchip",

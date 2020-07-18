@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>SCAN Login</title>
+    </head>
+    <body>
+        <h1>SCAN Login</h1>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email"></input>
+        <br>
+        <label for="pass">Password:</label>
+        <input type="password" name="pass" id="pass"></input>
+        <br>
+        <button onclick="doLogin()">Login</button>
+        <br>
+        <button onclick="doSignup()">Sign Up</button>
+        <br>
+        <p id="errortext"></p>
+
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyBU-GWPGasNiDfpxl6ZbKYeIO9UwSObVx0",
+                authDomain: "scan-web.firebaseapp.com",
+                databaseURL: "https://scan-web.firebaseio.com",
+                projectId: "scan-web",
+                storageBucket: "scan-web.appspot.com",
+                messagingSenderId: "300783041887",
+                appId: "1:300783041887:web:a23e632deeb657dbdb0aea",
+                measurementId: "G-VCPLKJC3FF"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+        </script>
+
+        <script>
+            function doLogin() {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("pass").value;
+
+                firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    document.getElementById("errortext").value = "Error: " + error.message + " (" + error.code + ")";
+                });
+
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "{{url_for("auth.login")}}", true);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                            xhr.send(JSON.stringify({
+                                "idToken": idToken
+                            }));
+                        }).catch(function(error) {
+                            document.getElementById("errortext").value = "Error: " + error.message + " (" + error.code + ")";
+                        });
+                    } else {
+                        // User is signed out.
+                        document.getElementById("errortext").value = "Error, signed out";
+                    }
+                });
+            }
+
+            function doSignup() {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("pass").value;
+                var successful = true;
+
+                firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    document.getElementById("errortext").value = "Error: " + error.message + " (" + error.code + ")";
+                    successful = false;
+                });
+
+                if (successful) {
+                    doLogin();
+                }
+            }
+        </script>
+    </body>
+</html>
