@@ -106,6 +106,8 @@ def submitOrder():
                 break
             price += (categorySum // count) * prices[category][count]
             categorySum %= count
+    if price <= 0:
+        abort(400, "Price cannot be 0")
     
     order = {
         "userInfo": userInfo,
@@ -122,7 +124,6 @@ def submitOrder():
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
-    # TODO: return link to order
     return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
@@ -158,7 +159,7 @@ def baker_view():
     pending_orders = fireClient.collection("orders").where("status.received", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()
 
     # load in all delivered orders
-    delivered_orders = fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()
+    # delivered_orders = fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()
 
     return render_template("baker_view.html", names=nameLookup, pending=[order.to_dict() for order in pending_orders])
 
@@ -285,3 +286,12 @@ def admin_view():
         return redirect(url_for("auth.login"))
     
     return "work in progress"
+
+@bakesale.route("/profile/<uid>", methods=["GET"])
+def view_profile(uid):
+    user_ref = fireClient.collection("users").document(uid)
+    user_obj = user_ref.get()
+    if not user_obj.exists:
+        abort(404, "User not found")
+    user_dict = user_obj.to_dict()
+    return render_template("view_profile.html", user=user_dict)
