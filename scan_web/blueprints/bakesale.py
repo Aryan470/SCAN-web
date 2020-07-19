@@ -190,13 +190,17 @@ def bake_item():
         abort(400, "Item not in order")
     
     if quantity <= 0 or quantity > (order_dict["quantities"][itemCategory][itemID] - order_dict["fulfillment"][itemCategory][itemID]["count"]):
-        abort(400, "Quantity is too invalid")
+        abort(400, "Quantity is invalid")
     
     order_dict["fulfillment"][itemCategory][itemID]["count"] += quantity
     if bakerID in order_dict["fulfillment"][itemCategory][itemID]["bakers"]:
-        order_dict["fulfillment"][itemCategory][itemID]["bakers"][bakerID] += quantity
+        order_dict["fulfillment"][itemCategory][itemID]["bakers"][bakerID]["count"] += quantity
     else:
-        order_dict["fulfillment"][itemCategory][itemID]["bakers"][bakerID] = quantity
+        user_name = session["name"]
+        order_dict["fulfillment"][itemCategory][itemID]["bakers"][bakerID] = {
+            "count": quantity,
+            "name": user_name
+        }
 
     # check to see if all quantities are met
     allMet = True
@@ -228,9 +232,14 @@ def deliver_item():
     
     order_dict = order_obj.to_dict()
     order_dict["status"]["delivered"] = True
-    order_dict["delivery"] = {}
-    order_dict["delivery"]["deliveredBy"] = uid
-    order_dict["delivery"]["UTC_timestamp"] = datetime.utcnow()
+
+    order_dict["delivery"] = {
+        "deliveredBy": {
+            "uid": uid,
+            "name": session["name"]
+        },
+        "UTC_timestamp": datetime.utcnow()
+    }
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))

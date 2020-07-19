@@ -7,6 +7,13 @@
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order</h1>
         <h2>Order Info</h2>
         <p><b>Status:</b> {{order.statusText}}</p>
+        {% if order.delivery is defined %}
+            <p><b>Delivery Information:</b></p>
+            <ul>
+                <li>Delivered by: {{order.delivery.deliveredBy.name}}</li>
+                <li>Delivered at: {{order.delivery.UTC_timestamp}}</li>
+            </ul>
+        {% endif %}
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
         <h3>Ordered Items:</h3>
