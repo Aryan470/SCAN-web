@@ -21,7 +21,7 @@
                     <ul>
                         {% for baker in order.fulfillment[category][item].bakers %}
                             <li>
-                                {{baker}}: {{order.fulfillment[category][item].bakers[baker]}}
+                                {{order.fulfillment[category][item].bakers[baker].name}}: {{order.fulfillment[category][item].bakers[baker].count}}
                             </li>
                         {% endfor %}
                     </ul>
