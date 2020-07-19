@@ -47,7 +47,8 @@ prices = {
 userVars = [
     "name",
     "phone",
-    "address"
+    "address",
+    "email"
 ]
 nameLookup = {
     "cookie": "Cookies",
@@ -259,18 +260,21 @@ def edit_profile():
             user_dict = user_obj.to_dict()
         else:
             user_dict = {"uid": uid}
-        return render_template("profile.html", user=user_dict)
+        return render_template("edit_profile.html", user=user_dict)
     else:
         try:
             user_dict = {}
-            user_dict["uid"] = request.form["uid"]
+            if session["uid"] != request.form["uid"]:
+                abort(400, "UID does not match session")
+            user_dict["uid"] = session["uid"]
             user_dict["name"] = request.form["name"]
             user_dict["role"] = request.form["role"]
+            user_dict["phone"] = request.form["phone"]
         except:
             abort(400, "Malformed edit profile request")
         
         user_ref.set(user_dict)
-        return redirect(url_for("bakesale.index"))
+        return redirect(url_for("bakesale.view_profile", uid=session["uid"]))
 
 @bakesale.route("/deliveryview", methods=["GET"])
 def delivery_view():

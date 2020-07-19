@@ -9,6 +9,9 @@
             <label for="name"><b>Name</b></label>
             <input type="text" name="name" id="name" value="{{user.name}}" placeholder="Enter your name" required></input>
             <br>
+            <label for="phone"><b>Phone Number</b></label>
+            <input type="tel" name="phone" id="phone" value="{{user.phone}}" placeholder="Enter your phone number" required></input>
+            <br>
             <label for="role"><b>Role</b></label>
             <select name="role" id="role" required>
                 {% if user.role == "baker" %}
