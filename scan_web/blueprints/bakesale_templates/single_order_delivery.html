@@ -21,7 +21,7 @@
                     <ul>
                         {% for baker in order.fulfillment[category][item].bakers %}
                             <li>
-                                {{order.fulfillment[category][item].bakers[baker].name}}: {{order.fulfillment[category][item].bakers[baker].count}}
+                                <a href="{{url_for("bakesale.view_profile", uid=baker)}}">{{order.fulfillment[category][item].bakers[baker].name}}</a>: {{order.fulfillment[category][item].bakers[baker].count}}
                             </li>
                         {% endfor %}
                     </ul>
