@@ -132,8 +132,10 @@ def submitOrder():
     fireClient.collection("orders").document(order["orderID"]).set(order)
 
     # Send confirmation email now
-    send_mail(userInfo["email"], "SCAN Order Confirmation", render_template("order_confirmation_email_plain.html", order=order, names=nameLookup),
-        html_content=render_template("order_confirmation_email.html", order=order, names=nameLookup))
+    orderURL = url_for("bakesale.showOrder", orderID=order["orderID"], _external=True)
+    send_mail(userInfo["email"], "SCAN Order Confirmation",
+    render_template("order_confirmation_email_plain.html", order=order, names=nameLookup, orderURL=orderURL),
+        html_content=render_template("order_confirmation_email.html", order=order, names=nameLookup, orderURL=orderURL))
     return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
 
 @bakesale.route("/order/<orderID>", methods=["GET"])

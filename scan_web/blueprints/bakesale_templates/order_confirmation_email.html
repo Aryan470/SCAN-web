@@ -4,7 +4,7 @@
     </head>
     <h1>SCAN Bake Sale Order Confirmation</h1>
     <h3>Thank you for your order, {{order.userInfo.name}}</h3>
-    <a href="{{url_for("bakesale.showOrder", orderID=order.orderID)}}">Here is a permanent link to your order</a>
+    <a href="{{orderURL}}">Here is a permanent link to your order</a>
     <p>We have received your order and are working to deliver it as soon as possible. You can use the provided link to check the status.
     We will send you another email when your order has been delivered.</p>
     <br>
