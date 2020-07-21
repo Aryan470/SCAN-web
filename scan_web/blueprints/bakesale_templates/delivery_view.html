@@ -9,6 +9,7 @@
             <caption><b>Baked Orders</b></caption>
             <tr>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Name</th>
                 <th>Address</th>
                 <th>Phone</th>
@@ -17,7 +18,8 @@
 
             {% for order in baked %}
                 <tr>
-                    <td>{{order.UTC_timestamp.split()[0]}}</td>
+                    <td class="date">{{order.UTC_timestamp}} UTC</td>
+                    <td class="time">{{order.UTC_timestamp}} UTC</td>
                     <td>{{order.userInfo.name}}</td>
                     <td>{{order.userInfo.address}}</td>
                     <td>{{order.userInfo.phone}}</td>
@@ -29,5 +31,7 @@
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>
         <a href="{{url_for("auth.logout")}}">Logout</a>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="{{url_for("static", filename="render_times.js")}}"></script>
     </body>
 </html>
