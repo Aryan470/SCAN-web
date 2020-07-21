@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>SCAN Bake Sale Order Confirmation</title>
+    </head>
+    <h1>SCAN Bake Sale Order Confirmation</h1>
+    <h3>Thank you for your order, {{order.userInfo.name}}</h3>
+    <a href="{{url_for("bakesale.showOrder", orderID=order.orderID)}}">Here is a permanent link to your order</a>
+    <p>We have received your order and are working to deliver it as soon as possible. You can use the provided link to check the status.
+    We will send you another email when your order has been delivered.</p>
+    <br>
+    <h2>Order Info</h2>
+    <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
+    <p><b>Order ID:</b> {{order.orderID}}</p>
+    <h3>Ordered Items:</h3>
+    {% for category in order.quantities %}
+        <h5>{{names[category]}}</h5>
+        <ul>
+        {% for item in order.quantities[category] %}
+            {% if order.quantities[category][item] > 0 %}
+                <li>{{names[item]}}: {{order.quantities[category][item]}}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    <br>
+    <h2>Customer Info</h2>
+    <p><b>Name:</b> {{order.userInfo.name}}</p>
+    <p><b>Phone Number:</b> {{order.userInfo.phone}}</p>
+    <p><b>Email Address:</b> {{order.userInfo.email}}</p>
+    <p><b>Address:</b> {{order.userInfo.address}}</p>
+    <br>
+    <p>    - Sincerely, the SCAN Team.</p>
+</html>

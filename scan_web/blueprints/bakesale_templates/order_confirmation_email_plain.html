@@ -1,0 +1,33 @@
+SCAN Bake Sale Order Confirmation
+Thank you for your order, {{order.userInfo.name}}
+
+Link to your order: {{url_for("bakesale.showOrder", orderID=order.orderID, _external=True)}}
+We have received your order and are working to deliver it as soon as possible. You can use the provided link to check the status. We will send you another email when your order has been delivered.
+
+Order Info
+Total Price: ${{'%0.2f' % order.price}}
+Order ID: {{order.orderID}}
+Ordered Items:
+
+{%- for category in order.quantities -%}
+    - {{names[category]}}
+
+
+    {%- for item in order.quantities[category] -%}
+        {%- if order.quantities[category][item] > 0 -%}
+            - {{names[item]}}: {{order.quantities[category][item]}}
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endfor %}
+
+Customer Info
+    - Name: {{order.userInfo.name}}
+    - Phone Number: {{order.userInfo.phone}}
+    - Email Address: {{order.userInfo.email}}
+    - Address: {{order.userInfo.address}}
+
+
+    - Sincerely, the SCAN Team.

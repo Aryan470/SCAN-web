@@ -3,6 +3,11 @@ from datetime import datetime
 from uuid import uuid4
 from scan_web import fireClient
 from uuid import uuid4
+import smtplib
+import ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import os
 
 bakesale = Blueprint("bakesale", __name__, template_folder="bakesale_templates")
 categories = {
@@ -125,6 +130,10 @@ def submitOrder():
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
+
+    # Send confirmation email now
+    send_mail(userInfo["email"], "SCAN Order Confirmation", render_template("order_confirmation_email_plain.html", order=order, names=nameLookup),
+        html_content=render_template("order_confirmation_email.html", order=order, names=nameLookup))
     return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
@@ -299,3 +308,25 @@ def view_profile(uid):
         abort(404, "User not found")
     user_dict = user_obj.to_dict()
     return render_template("view_profile.html", user=user_dict)
+
+def send_mail(recipient, subject, plain_content, html_content=None):
+    port = 465
+    smtp_server = "smtp.gmail.com"
+
+    sender_email = os.environ["EMAIL"]
+    password = os.environ["EMAIL_PASS"]
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = sender_email
+    message["To"] = recipient
+
+    message.attach(MIMEText(plain_content, "plain"))
+    if html_content is not None:
+        message.attach(MIMEText(str(html_content), "html"))
+    
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(sender_email, password)
+    server.sendmail(sender_email, recipient, message.as_string())
+    server.quit()
