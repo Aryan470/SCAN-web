@@ -6,6 +6,7 @@
     <body>
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order</h1>
         <h2>Order Info</h2>
+        <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}} UTC</span></p>
         <p><b>Status:</b> {{order.statusText}}</p>
         {% if order.delivery is defined %}
             <p><b>Delivery Information:</b></p>
