@@ -34,5 +34,8 @@ def login():
 
 @auth.route("/logout", methods=["GET"])
 def logout():
-    session.clear()
+    if "uid" in session:
+        session.pop("uid")
+    if "name" in session:
+        session.pop("name")
     return redirect(url_for("bakesale.index"))
