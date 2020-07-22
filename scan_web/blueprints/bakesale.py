@@ -138,10 +138,10 @@ def submitOrder():
             render_template("order_confirmation_email_plain.html", order=order, names=nameLookup, orderURL=orderURL),
             html_content=render_template("order_confirmation_email.html", order=order, names=nameLookup, orderURL=orderURL))
         flash("An email was sent to you containing a link to this order and its contents.")
-        return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
-    except:
+    except BaseException as e:
+        print("EMAIL ERROR:", e)
         flash("An error occurred while sending an email, please save this link to access your order.")
-        return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
+    return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
 
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
