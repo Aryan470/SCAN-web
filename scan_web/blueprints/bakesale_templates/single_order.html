@@ -4,6 +4,16 @@
     </head>
 
     <body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <h2>Messages</h2>
+                <ul class="flashed">
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order</h1>
         <h2>Order Info</h2>
         <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}} UTC</span></p>
