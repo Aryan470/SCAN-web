@@ -1,0 +1,73 @@
+body {
+    background-color: #3a8fb880;
+    /*font-family: "Trebuchet MS", Helvetica, sans-serif;*/
+    font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
+    text-align: center;
+}
+
+.categoryset {
+    display: inline;
+    border: none;
+}
+
+.infoset {
+    display: inline;
+    border: none;
+}
+
+.pricedisplay {
+    color: black;
+    font-size: 1.5em;
+}
+
+.button {
+    color: black
+}
+
+.personalinfolabel {
+    color: black;
+    font-size: 1.5em;
+}
+
+.infolabel {
+    color: black;
+}
+
+.infotext {
+    color: black
+}
+
+.itemqty {
+    color: black;
+    width: 3em;
+    float: right;
+}
+
+.itemlabel {
+    color: black;
+    width: 10em;
+}
+
+.categorylabel {
+    color: black;
+    font-size: 1.3em;
+}
+
+.title {
+    color: black;
+    font-size: 2.5em;
+}
+
+.categorytable {
+    margin: auto;
+}
+
+table.pricebreakdown {
+    margin: auto;
+    border: 1px solid black;
+}
+
+.pricebreakdown {
+    text-align: right;
+}
