@@ -76,6 +76,11 @@ nameLookup = {
 
     "brownies_brownie": "Brownie"
 }
+role_names = {
+    "baker": "Baker",
+    "delivery": "Delivery",
+    "both": "Baker and Delivery",
+}
 number_names = {
     1: "one",
     6: "a half dozen",
@@ -282,7 +287,7 @@ def edit_profile():
             user_dict = user_obj.to_dict()
         else:
             user_dict = {"uid": uid}
-        return render_template("edit_profile.html", user=user_dict)
+        return render_template("edit_profile.html", user=user_dict, rolenames=role_names)
     else:
         try:
             user_dict = {}
@@ -320,7 +325,7 @@ def view_profile(uid):
     if not user_obj.exists:
         abort(404, "User not found")
     user_dict = user_obj.to_dict()
-    return render_template("view_profile.html", user=user_dict)
+    return render_template("view_profile.html", user=user_dict, rolenames=role_names)
 
 def send_mail(recipient, subject, plain_content, html_content=None):
     if os.environ["CONTEXT"] == "PROD":

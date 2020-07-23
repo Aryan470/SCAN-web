@@ -14,23 +14,9 @@
             <br>
             <label for="role"><b>Role</b></label>
             <select name="role" id="role" required>
-                {% if user.role == "baker" %}
-                    <option value="baker" selected="selected">Baker</option>
-                {% else %}
-                    <option value="baker">Baker</option>
-                {% endif %}
-
-                {% if user.role == "delivery" %}
-                    <option value="delivery" selected="selected">Delivery</option>
-                {% else %}
-                    <option value="delivery">Delivery</option>
-                {% endif %}
-
-                {% if user.role == "both" %}
-                    <option value="both" selected="selected">Both</option>
-                {% else %}
-                    <option value="both">Both</option>
-                {% endif %}
+                {% for role, name in rolenames|dictsort() %}
+                    <option value="{{role}}" {% if user.role == role %}selected="selected"{% endif %}>{{name}}</option>
+                {% endfor %}
             </select>
             <input type="hidden" name="uid" id="uid" value="{{user.uid}}"></input>
             <br>
