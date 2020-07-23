@@ -76,6 +76,11 @@ nameLookup = {
 
     "brownies_brownie": "Brownie"
 }
+number_names = {
+    1: "one",
+    6: "a half dozen",
+    12: "a dozen"
+}
 
 
 @bakesale.route("/", methods=["GET"])
@@ -84,7 +89,7 @@ def index():
 
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
-    return render_template("orderform.html")
+    return render_template("orderform.html", categories=categories, names=nameLookup, prices=prices, number_names=number_names)
 
 @bakesale.route("/submitorder", methods=["GET"])
 def submitOrder():
