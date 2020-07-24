@@ -10,7 +10,7 @@ fireClient = firestore.client()
 from flask import Flask, render_template, session, redirect, request, url_for
 from scan_web.blueprints import bakesale, auth
 
-def create_app(port):
+def create_app():
     app = Flask(__name__)
     app.config["PREFERRED_URL_SCHEME"] = "https"
     if os.environ["CONTEXT"] == "PROD":

@@ -1,1 +1,1 @@
-web: python app.py
+web: gunicorn -b 0.0.0.0:$PORT "scan_web:create_app()"
