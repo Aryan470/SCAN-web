@@ -27,6 +27,31 @@ number_names = {
     12: "a dozen"
 }
 
+#def add_gf_products():
+#    for category_obj in fireClient.collection("categories").stream():
+#        category = category_obj.to_dict()
+#        category_id = category["category_id"]
+#        if category_id.startswith("gf_") or category_id.startswith("r_"):
+#            continue
+#        new_category_id = "r_" + category_id
+#
+#        new_category_data = {
+#            "name": category["name"],
+#            "category_id": new_category_id,
+#            "prices": category["prices"].copy()
+#        }
+#        #for qty in category["prices"]:
+#        #    new_category_data["prices"][qty] += 1
+#        
+#        fireClient.collection("categories").document(new_category_id).set(new_category_data)
+#
+#        for product_obj in fireClient.collection("categories").document(category_id).collection("products").stream():
+#            product = product_obj.to_dict()
+#            gf_product = product.copy()
+#            gf_product["product_id"] = "r_" + gf_product["product_id"]
+#            fireClient.collection("categories").document(new_category_id).collection("products").document(gf_product["product_id"]).set(gf_product)
+#add_gf_products()
+
 @bakesale.route("/reloadproducts")
 def load_product_data():
     new_product_data = {}
