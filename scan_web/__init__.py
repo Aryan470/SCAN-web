@@ -14,7 +14,7 @@ def create_app(port):
     app = Flask(__name__)
     app.config["PREFERRED_URL_SCHEME"] = "https"
     if os.environ["CONTEXT"] == "PROD":
-        app.config["SERVER_NAME"] = "scan-web.herokuapp.com"
+        app.config["SERVER_NAME"] = "sicklecellawareness.net"
     if "SECRET_KEY" in os.environ:
         app.secret_key = os.environ["SECRET_KEY"]
     else:
