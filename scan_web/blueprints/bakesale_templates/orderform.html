@@ -8,18 +8,18 @@
         <!--<script src="{{url_for("static", filename="calculate_price.js")}}"></script>-->
         <h1 class="title">SCAN Bake Sale</h1>
         <form action="/bakesale/submitorder" oninput="updateForm()">
-            {% for category in categories %}
+            {% for category in product_data %}
                 <fieldset class="categoryset">
-                    <legend class="categorylabel">{{names[category]}}
-                    ({%- for qty in prices[category] -%}
-                        ${{"{:,.2f}".format(prices[category][qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
+                    <legend class="categorylabel">{{product_data[category].name}}
+                    ({%- for qty in product_data[category].prices -%}
+                        ${{"{:,.2f}".format(product_data[category].prices[qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
                     {%- endfor -%})
                     </legend>
                     <table class="categorytable">
-                        {% for item in categories[category] %}
+                        {% for item in product_data[category].products %}
                             <tr>
                                 <td>
-                                    <label class="itemlabel" for="{{item}}">{{names[item]}}</label>
+                                    <label class="itemlabel" for="{{item}}">{{product_data[category].products[item].name}}</label>
                                 </td>
                                 <td>
                                     <input class="itemqty" type="number" name="{{item}}" min=0 step=1 id="{{item}}" value=0>
@@ -60,10 +60,10 @@
                     <th>Quantity</th>
                     <th>Price</th>
                 </tr>
-                {% for category in categories %}
+                {% for category in product_data %}
                     <tr>
                         <td>
-                            {{names[category]}}
+                            {{product_data[category].name}}
                         </td>
                         <td id="pricebreakdown_{{category}}_quantity">
                             0
@@ -82,21 +82,21 @@
         <script>
             function updateForm() {
                 var quantities = {
-                    {% for category in categories %}
+                    {% for category in product_data %}
                         "{{category}}":
-                        {%- for item in categories[category] -%}
+                        {%- for item in product_data[category].products -%}
                         Number(document.getElementById("{{item}}").value){% if not loop.last %} + {% endif %}
                         {%- endfor -%}
                         {%- if not loop.last -%},{%- endif -%}
                     {% endfor %}
                 };
                 var totalPrice = 0.0;
-                {% for category in categories %}
+                {% for category in product_data %}
                     // Category: {{category}}
                     var thisPrice = 0;
                     var numItems = quantities["{{category}}"];
-                    {% for qty in prices[category]|dictsort(reverse=True) %}
-                        thisPrice +=  Math.floor(numItems / {{qty[0]}}) * {{prices[category][qty[0]]}};
+                    {% for qty in product_data[category].prices|dictsort(reverse=True) %}
+                        thisPrice +=  Math.floor(numItems / {{qty[0]}}) * {{product_data[category].prices[qty[0]]}};
                         numItems %= {{qty[0]}};
                     {% endfor %}
                     document.getElementById("pricebreakdown_{{category}}_quantity").innerText = quantities["{{category}}"];

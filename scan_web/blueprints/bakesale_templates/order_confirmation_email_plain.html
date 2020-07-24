@@ -10,12 +10,12 @@ Order ID: {{order.orderID}}
 Ordered Items:
 
 {%- for category in order.quantities -%}
-    - {{names[category]}}
+    - {{product_data[category].name}}
 
 
     {%- for item in order.quantities[category] -%}
         {%- if order.quantities[category][item] > 0 -%}
-            - {{names[item]}}: {{order.quantities[category][item]}}
+            - {{product_data[category].products[item].name}}: {{order.quantities[category][item]}}
 
         {% endif %}
 
