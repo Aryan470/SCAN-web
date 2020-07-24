@@ -21,10 +21,10 @@
         <a href={{url_for("bakesale.deliver_item", orderID=order.orderID, address=order.userInfo.address, price=order.price)}}><h2>Deliver this</h2></a>
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
-            <h5>{{names[category]}}</h5>
+            <h5>{{product_data[category].name}}</h5>
             <ul>
             {% for item in order.fulfillment[category] %}
-                <li>{{names[item]}}:
+                <li>{{product_data[category].products[item].name}}:
                     {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
                     <ul>
                         {% for baker in order.fulfillment[category][item].bakers %}

@@ -27,7 +27,7 @@
                             {% for category in order.fulfillment %}
                                 {% for item in order.fulfillment[category] %}
                                     <li>
-                                        {{names[item]}} ({{names[category]}}):
+                                        {{product_data[category].products[item].name}} ({{product_data[category].name}}):
                                         {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
                                     </li>
                                 {% endfor %}

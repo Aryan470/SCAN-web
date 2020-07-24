@@ -29,12 +29,10 @@
         <p><b>Order ID:</b> {{order.orderID}}</p>
         <h3>Ordered Items:</h3>
         {% for category in order.quantities %}
-            <h5>{{names[category]}}</h5>
+            <h5>{{product_data[category].name}}</h5>
             <ul>
             {% for item in order.quantities[category] %}
-                {% if order.quantities[category][item] > 0 %}
-                    <li>{{names[item]}}: {{order.quantities[category][item]}}</li>
-                {% endif %}
+                <li>{{product_data[category].products[item].name}}: {{order.quantities[category][item]}}</li>
             {% endfor %}
             </ul>
         {% endfor %}

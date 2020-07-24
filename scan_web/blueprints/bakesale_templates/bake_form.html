@@ -6,7 +6,7 @@
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Baking Form</h1>
 
-        <p>You have requested to bake {{names[itemID]}} ({{names[itemCategory]}}) for order {{orderID}}</p>
+        <p>You have requested to bake {{product_data[itemCategory].products[itemID].name}} ({{product_data[itemCategory].name}}) for order {{orderID}}</p>
         <p>You can bake from anywhere between 1 and {{qtyMax}} of these, please specify the quantity below.</p>
         <form action="{{url_for("bakesale.bake_item")}}" method="POST">
             <input type="hidden" name="orderID" value={{orderID}}></input>
