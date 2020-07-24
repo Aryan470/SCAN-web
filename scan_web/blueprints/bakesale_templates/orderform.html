@@ -8,18 +8,18 @@
         <!--<script src="{{url_for("static", filename="calculate_price.js")}}"></script>-->
         <h1 class="title">SCAN Bake Sale</h1>
         <form action="/bakesale/submitorder" oninput="updateForm()">
-            {% for category in product_data %}
+            {% for category, category_data in product_data|dictsort(reverse=True) %}
                 <fieldset class="categoryset">
-                    <legend class="categorylabel">{{product_data[category].name}}
-                    ({%- for qty in product_data[category].prices -%}
-                        ${{"{:,.2f}".format(product_data[category].prices[qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
+                    <legend class="categorylabel">{{category_data.name}}
+                    ({%- for qty in category_data.prices -%}
+                        ${{"{:,.2f}".format(category_data.prices[qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
                     {%- endfor -%})
                     </legend>
                     <table class="categorytable">
-                        {% for item in product_data[category].products %}
+                        {% for item in category_data.products %}
                             <tr>
                                 <td>
-                                    <label class="itemlabel" for="{{item}}">{{product_data[category].products[item].name}}</label>
+                                    <label class="itemlabel" for="{{item}}">{{category_data.products[item].name}}</label>
                                 </td>
                                 <td>
                                     <input class="itemqty" type="number" name="{{item}}" min=0 step=1 id="{{item}}" value=0>
@@ -52,18 +52,17 @@
             </fieldset>
             <br>
 
-            <output class="pricedisplay" name="price" id="pricedisplay">Total Price: $0.00</output>
-            <br><br>
+            <br>
             <table class="pricebreakdown">
                 <tr>
                     <th>Category</th>
                     <th>Quantity</th>
                     <th>Price</th>
                 </tr>
-                {% for category in product_data %}
+                {% for category, category_data in product_data|dictsort(reverse=True) %}
                     <tr>
                         <td>
-                            {{product_data[category].name}}
+                            {{category_data.name}}
                         </td>
                         <td id="pricebreakdown_{{category}}_quantity">
                             0
@@ -74,6 +73,9 @@
                     </tr>
                 {% endfor %}
             </table>
+            <br>
+            <output class="pricedisplay" name="price" id="pricedisplay">Total Price: $0.00</output>
+            <br><br>
             <input class="button" type="submit" value="Submit Order"></submit>
         </form>
         <br><br>
