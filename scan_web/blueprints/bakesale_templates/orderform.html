@@ -10,7 +10,7 @@
         <form action="/bakesale/submitorder" oninput="updateForm()">
             {% for category, category_data in product_data|dictsort(reverse=True) %}
                 <fieldset class="categoryset">
-                    <legend class="categorylabel">{{category_data.name}}
+                    <legend class="categorylabel collapsible">{{category_data.name}}
                     ({%- for qty in category_data.prices -%}
                         ${{"{:,.2f}".format(category_data.prices[qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
                     {%- endfor -%})
@@ -80,7 +80,7 @@
         </form>
         <br><br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
-
+        <script src="{{url_for("static", filename="render_collapsibles.js")}}"></script>
         <script>
             function updateForm() {
                 var quantities = {
