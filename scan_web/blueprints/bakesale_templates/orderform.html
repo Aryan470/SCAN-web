@@ -12,8 +12,8 @@
             {% for category, category_data in product_data|dictsort(reverse=True) %}
                 <fieldset class="categoryset">
                     <legend class="categorylabel collapsible">{{category_data.name}}
-                    ({%- for qty in category_data.prices -%}
-                        ${{"{:,.2f}".format(category_data.prices[qty])}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
+                    ({%- for qty, price in category_data.prices|dictsort() -%}
+                        ${{"{:,.2f}".format(price)}} for {% if qty in number_names %}{{number_names[qty]}}{% else %}{{qty}}{% endif %}{% if not loop.last %}, {% endif %}
                     {%- endfor -%})
                     </legend>
                     <table class="categorytable">
