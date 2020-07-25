@@ -1,7 +1,7 @@
 body {
     background-color: #3a8fb880;
-    /*font-family: "Trebuchet MS", Helvetica, sans-serif;*/
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    /*font-family: Arial, Helvetica, sans-serif*/
     margin: auto;
     text-align: center;
 }
@@ -13,7 +13,7 @@ body {
 
 .infoset {
     display: inline;
-    border: none;
+    border-color: black;
 }
 
 .pricedisplay {
