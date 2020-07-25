@@ -34,7 +34,7 @@
 
         <h2>Customer Info</h2>
         <p><b>Name:</b> {{order.userInfo.name}}</p>
-        <p><b>Phone Number:</b> {{order.userInfo.phone}}</p>
+        <p><b>Phone Number:</b> <a href="tel:{{order.userInfo.phone}}">{{order.userInfo.phone}}</a></p>
         <p><b>Email Address:</b> {{order.userInfo.email}}</p>
         <p><b>Address:</b> {{order.userInfo.address}}</p>
         <br><br>

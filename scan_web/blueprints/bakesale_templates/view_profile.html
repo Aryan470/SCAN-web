@@ -4,7 +4,7 @@
     <head>
     <body>
         <h1>{{user.name}}'s Profile</h1>
-        <p>Phone: {{user.phone}}</p>
+        <p>Phone: <a href="tel:{{user.phone}}">{{user.phone}}</a></p>
         <p>Role: {{rolenames[user.role]}}</p>
         <p>UserID: {{user.uid}}</p>
         <br><br>
