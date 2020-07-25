@@ -22,7 +22,7 @@
                     <td class="time">{{order.UTC_timestamp}} UTC</td>
                     <td>{{order.userInfo.name}}</td>
                     <td>{{order.userInfo.address}}</td>
-                    <td>{{order.userInfo.phone}}</td>
+                    <td><a href="tel:{{order.userInfo.phone}}">{{order.userInfo.phone}}</a></td>
                     <td><a href={{url_for("bakesale.showOrder", orderID=order.orderID, view="delivery")}}>Click Me</a></td>
                 </tr>
             {% endfor %}
