@@ -18,10 +18,10 @@
             {% for order in pending %}
                 <tr>
                     <!--loop through all date and time class tags and render them at the bottom of the page-->
-                    <td class="date">{{order.UTC_timestamp}} UTC</td>
-                    <td class="time">{{order.UTC_timestamp}} UTC</td>
+                    <td class="date">{{order.UTC_timestamp}}</td>
+                    <td class="time">{{order.UTC_timestamp}}</td>
                     <td>{{order.userInfo.name}}</td>
-                    <td><a href={{url_for("bakesale.showOrder", orderID=order.orderID, view="baker")}}>Click Me</a></td>
+                    <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="baker")}}>Click Me</a></td>
                     <td>
                         <ul>
                             {% for category in order.fulfillment %}

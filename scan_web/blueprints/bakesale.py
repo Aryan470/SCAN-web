@@ -26,6 +26,7 @@ number_names = {
     6: "a half dozen",
     12: "a dozen"
 }
+admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1"]
 
 #def add_gf_products():
 #    for category_obj in fireClient.collection("categories").stream():
@@ -87,8 +88,8 @@ def index():
 def orderform():
     return render_template("orderform.html", product_data=product_data, number_names=number_names)
 
-@bakesale.route("/submitorder", methods=["GET"])
-def submitOrder():
+@bakesale.route("/submit_order", methods=["GET"])
+def submit_order():
     userInfo = {}
     for userVar in userVars:
         userInfo[userVar] = request.args.get(userVar, default="N/A")
@@ -120,20 +121,21 @@ def submitOrder():
         "userInfo": userInfo,
         "price": price,
         "quantities": quantities,
-        "UTC_timestamp": str(datetime.utcnow()),
+        "UTC_timestamp": str(datetime.utcnow()) + " UTC",
         "orderID": str(uuid4()),
         "fulfillment": fulfillment,
         "status": {
             "received": True,
             "baked": False,
             "delivered": False,
+            "collected": False
         }
     }
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
 
     # Send confirmation email now
-    orderURL = url_for("bakesale.showOrder", orderID=order["orderID"], _external=True)
+    orderURL = url_for("bakesale.show_order", orderID=order["orderID"], _external=True)
     try:
         send_mail(userInfo["email"], "SCAN Order Confirmation",
             render_template("order_confirmation_email_plain.html", order=order, product_data=product_data, orderURL=orderURL),
@@ -142,11 +144,11 @@ def submitOrder():
     except BaseException as e:
         print("EMAIL ERROR:", e)
         flash("An error occurred while sending an email, please save this link to access your order.")
-    return redirect(url_for("bakesale.showOrder", orderID=order["orderID"]))
+    return redirect(url_for("bakesale.show_order", orderID=order["orderID"]))
 
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
-def showOrder(orderID):
+def show_order(orderID):
     order_ref = fireClient.collection("orders").document(orderID)
     order_obj = order_ref.get()
     if not order_obj.exists:
@@ -154,7 +156,9 @@ def showOrder(orderID):
     
     view = request.args.get("view", default="customer")
     order_dict = order_obj.to_dict()
-    if order_dict["status"]["delivered"]:
+    if view == "admin" and order_dict["status"]["collected"]:
+        order_dict["statusText"] = "Collected"
+    elif order_dict["status"]["delivered"]:
         order_dict["statusText"] = "Delivered"
     elif order_dict["status"]["baked"]:
         order_dict["statusText"] = "Baked"
@@ -165,10 +169,12 @@ def showOrder(orderID):
         return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
     elif "uid" in session and view == "delivery":
         return render_template("single_order_delivery.html", order=order_dict, product_data=product_data)
+    elif "uid" in session and view == "admin" and session["uid"] in admin_uids:
+        return render_template("single_order_admin.html", order=order_dict, product_data=product_data)
     else:
         return render_template("single_order.html", order=order_dict, product_data=product_data)
 
-@bakesale.route("/bakerview", methods=["GET"])
+@bakesale.route("/baker_view", methods=["GET"])
 def baker_view():
     # check login
     if "uid" not in session:
@@ -176,9 +182,6 @@ def baker_view():
     
     # load in all pending orders
     pending_orders = fireClient.collection("orders").where("status.received", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()
-
-    # load in all delivered orders
-    # delivered_orders = fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()
 
     return render_template("baker_view.html", product_data=product_data, pending=[order.to_dict() for order in pending_orders])
 
@@ -258,11 +261,44 @@ def deliver_item():
             "uid": uid,
             "name": session["name"]
         },
-        "UTC_timestamp": datetime.utcnow()
+        "UTC_timestamp": str(datetime.utcnow()) + " UTC"
     }
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))
+
+@bakesale.route("/collectitem", methods=["GET", "POST"])
+def collect_item():
+    if "uid" not in session or session["uid"] not in admin_uids:
+        return redirect(url_for("auth.login"))
+    
+    if request.method == "GET":
+        return render_template("collect_form.html", orderID=request.args.get("orderID"),
+        price=request.args.get("price"), deliverer={
+            "name": request.args.get("deliverer_name"),
+            "uid": request.args.get("deliverer_id")
+        })
+    
+    orderID = request.form["orderID"]
+    uid = session["uid"]
+
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    
+    order_dict = order_obj.to_dict()
+    order_dict["status"]["collected"] = True
+    order_dict["collection"] = {
+        "collector": {
+            "uid": session["uid"],
+            "name": session["name"]
+        },
+        "UTC_timestamp": str(datetime.utcnow()) + " UTC"
+    }
+
+    order_ref.set(order_dict)
+    return redirect(url_for("bakesale.admin_view"))
 
 @bakesale.route("/editprofile", methods=["GET", "POST"])
 def edit_profile():
@@ -304,10 +340,11 @@ def delivery_view():
 
 @bakesale.route("/adminview", methods=["GET"])
 def admin_view():
-    if "uid" not in session:
+    if "uid" not in session or session["uid"] not in admin_uids:
         return redirect(url_for("auth.login"))
     
-    return "work in progress"
+    delivered_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.delivered", "==", True).where("status.collected", "==", False).order_by("UTC_timestamp").stream()]
+    return render_template("admin_view.html", delivered=delivered_orders)
 
 @bakesale.route("/profile/<uid>", methods=["GET"])
 def view_profile(uid):

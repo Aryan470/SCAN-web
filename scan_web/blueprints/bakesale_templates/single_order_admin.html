@@ -1,11 +1,11 @@
 <html>
     <head>
-        <title>SCAN Bake Sale Order (Baker View)</title>
+        <title>SCAN Bake Sale Order (Admin View)</title>
     </head>
 
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
-        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Baker View)</h1>
+        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Admin View)</h1>
         <h2>Order Info</h2>
         <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}}</span></p>
         <p><b>Status:</b> {{order.statusText}}</p>
@@ -16,18 +16,31 @@
                 <li>Delivered at: <span class="datetime">{{order.delivery.UTC_timestamp}}</span<</li>
             </ul>
         {% endif %}
+        {% if order.collection is defined %}
+            <p><b>Collection Information:</b></p>
+            <ul>
+                <li>Collection by: <a href="{{url_for("bakesale.view_profile", uid=order.collection.collector.uid)}}">{{order.collection.collector.name}}</a></li>
+                <li>Collection at: <span class="datetime">{{order.collection.UTC_timestamp}}</span<</li>
+            </ul>
+        {% endif %}
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
+        <a href={{url_for("bakesale.collect_item", orderID=order.orderID, price=order.price, deliverer_id=order.delivery.deliveredBy.uid, deliverer_name=order.delivery.deliveredBy.name)}}><h2>Collect this</h2></a>
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
             <h5>{{product_data[category].name}}</h5>
             <ul>
             {% for item in order.fulfillment[category] %}
                 <li>{{product_data[category].products[item].name}}:
-                 {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
-                (<a href={{url_for("bakesale.bake_item", orderID=order.orderID, itemCategory=category,
-                itemID=item, qtyMax=(order.quantities[category][item] - order.fulfillment[category][item].count))}}>
-                Bake this</a>)</li>
+                    {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
+                    <ul>
+                        {% for baker in order.fulfillment[category][item].bakers %}
+                            <li>
+                                <a href="{{url_for("bakesale.view_profile", uid=baker)}}">{{order.fulfillment[category][item].bakers[baker].name}}</a>: {{order.fulfillment[category][item].bakers[baker].count}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
             </ul>
         {% endfor %}
@@ -38,7 +51,7 @@
         <p><b>Email Address:</b> {{order.userInfo.email}}</p>
         <p><b>Address:</b> {{order.userInfo.address}}</p>
         <br><br>
-        <a href="{{url_for("bakesale.baker_view")}}">Back to baker view</a>
+        <a href="{{url_for("bakesale.delivery_view")}}">Back to delivery view</a>
         <br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>
