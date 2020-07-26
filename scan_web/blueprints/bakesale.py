@@ -131,6 +131,7 @@ def submit_order():
             "collected": False
         }
     }
+    increment_count("received")
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
 
@@ -238,6 +239,8 @@ def bake_item():
         order_dict["baking"] = {
             "UTC_timestamp": str(datetime.utcnow()) + " UTC",
         }
+        increment_count("baked")
+        update_stats("received", "baked", order_dict["UTC_timestamp"], order_dict["baking"]["UTC_timestamp"])
     
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.baker_view"))
@@ -268,6 +271,10 @@ def deliver_item():
         },
         "UTC_timestamp": str(datetime.utcnow()) + " UTC"
     }
+
+    increment_count("delivered")
+    update_stats("received", "delivered", order_dict["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
+    update_stats("baked", "delivered", order_dict["baking"]["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))
@@ -301,6 +308,10 @@ def collect_item():
         },
         "UTC_timestamp": str(datetime.utcnow()) + " UTC"
     }
+    increment_count("collected")
+    update_stats("received", "collected", order_dict["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
+    update_stats("baked", "collected", order_dict["baking"]["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
+    update_stats("delivered", "collected", order_dict["delivery"]["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.admin_view"))
@@ -383,3 +394,21 @@ def send_mail(recipient, subject, plain_content, html_content=None):
         server.login(sender_email, password)
         server.sendmail(sender_email, recipient, message.as_string())
         server.quit()
+
+def increment_count(category):
+    count_ref = fireClient.collection("statistics").document("counts")
+    count_dict = count_ref.get().to_dict()
+    count_dict[category] += 1
+    count_ref.set(count_dict)
+
+def update_stats(start_category, end_category, start_timestamp, end_timestamp):
+    fmt = "%Y-%m-%d %H:%M:%S.%f UTC"
+    start_datetime = datetime.strptime(start_timestamp, fmt)
+    end_datetime = datetime.strptime(end_timestamp, fmt)
+    # total seconds divided by seconds in a day
+    delta_days = (end_datetime - start_datetime).total_seconds() / (3600 * 24)
+
+    times_ref = fireClient.collection("statistics").document("times")
+    times = times_ref.get().to_dict()
+    times[start_category][end_category] += delta_days
+    times_ref.set(times)
