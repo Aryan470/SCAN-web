@@ -325,10 +325,11 @@ def send_mail(recipient, subject, plain_content, html_content=None):
 
         sender_email = os.environ["EMAIL"]
         password = os.environ["EMAIL_PASS"]
+        alias_email = os.environ["ALIAS_EMAIL"]
 
         message = MIMEMultipart("alternative")
         message["Subject"] = subject
-        message["From"] = sender_email
+        message["From"] = alias_email
         message["To"] = recipient
 
         message.attach(MIMEText(plain_content, "plain"))
