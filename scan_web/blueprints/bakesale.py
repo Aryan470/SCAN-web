@@ -233,7 +233,12 @@ def bake_item():
                 allMet = False
                 break
     
-    order_dict["status"]["baked"] = allMet
+    if allMet:
+        order_dict["status"]["baked"] = allMet
+        order_dict["baking"] = {
+            "UTC_timestamp": str(datetime.utcnow()) + " UTC",
+        }
+    
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.baker_view"))
 
