@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>SCAN Admin View</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Admin View</h1>
+        <table border="1">
+            <caption><b>Uncollected Delivered Orders</b></caption>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Date Delivered</th>
+                <th>Time Delivered</th>
+                <th>Name</th>
+                <th>Deliverer</th>
+                <th>Amount</th>
+                <th>Link</th>
+            </tr>
+
+            {% for order in baked %}
+                <tr>
+                    <td class="date">{{order.UTC_timestamp}} UTC</td>
+                    <td class="time">{{order.UTC_timestamp}} UTC</td>
+                    <td class="date">{{order.delivery.UTC_timestamp}} UTC</td>
+                    <td class="time">{{order.delivery.UTC_timestamp}} UTC</td>
+                    <td>{{order.userInfo.name}}</td>
+                    <td><a href="{{url_for("bakesale.view_profile", uid=order.delivery.deliveredBy.uid)}}">order.delivery.deliveredBy.name</a></td>
+                    <td>{{order.price}}</td>
+                    <td><a href={{url_for("bakesale.showOrder", orderID=order.orderID, view="admin")}}>Click Me</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="{{url_for("static", filename="render_times.js")}}"></script>
+    </body>
+</html>

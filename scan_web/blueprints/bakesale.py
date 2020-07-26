@@ -258,7 +258,7 @@ def deliver_item():
             "uid": uid,
             "name": session["name"]
         },
-        "UTC_timestamp": datetime.utcnow()
+        "UTC_timestamp": str(datetime.utcnow())
     }
 
     order_ref.set(order_dict)
