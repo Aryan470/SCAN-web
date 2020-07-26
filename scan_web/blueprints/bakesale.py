@@ -275,6 +275,7 @@ def deliver_item():
     increment_count("delivered")
     update_stats("received", "delivered", order_dict["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
     update_stats("baked", "delivered", order_dict["baking"]["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
+    increment_product_counts(order_dict["quantities"])
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))
@@ -412,3 +413,21 @@ def update_stats(start_category, end_category, start_timestamp, end_timestamp):
     times = times_ref.get().to_dict()
     times[start_category][end_category] += delta_days
     times_ref.set(times)
+
+def increment_product_counts(order_quantities):
+    for category in order_quantities:
+        category_freqs_ref = fireClient.collection("statistics").document("frequencies").collection("categories").document(category)
+        category_obj = category_freqs_ref.get()
+        if category_obj.exists:
+            category_dict = category_obj.to_dict()
+        else:
+            category_dict = {}
+
+        for product_id in order_quantities[category]:
+            if order_quantities[category][product_id] > 0:
+                if product_id in category_dict:
+                    category_dict[product_id] += order_quantities[category][product_id]
+                else:
+                    category_dict[product_id] = order_quantities[category][product_id]
+        
+        category_freqs_ref.set(category_dict)
