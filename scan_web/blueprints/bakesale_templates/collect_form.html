@@ -1,17 +1,17 @@
 <html>
     <head>
-        <title>SCAN Delivery Form</title>
+        <title>SCAN Collection Form</title>
     </head>
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
-        <h1>SCAN Delivery Form</h1>
+        <h1>SCAN Collection Form</h1>
 
-        <p>Are you sure you delivered this order to {{address}} and received ${{"%0.2f" % price|float()}}? Your user ID and the current time will be recorded.</p>
+        <p>Are you sure you collected ${{"%0.2f" % price|float()}} from {{deliverer.name}}? Your user ID and the current time will be recorded.</p>
         <p>Order ID: {{orderID}}</p>
-        <a href="{{url_for("bakesale.show_order", orderID=orderID, view="delivery")}}">Link to order</p>
-        <form action="{{url_for("bakesale.deliver_item")}}" method="POST">
+        <a href="{{url_for("bakesale.show_order", orderID=orderID, view="admin")}}">Link to order</p>
+        <form action="{{url_for("bakesale.collect_item")}}" method="POST">
             <input type="hidden" name="orderID" value={{orderID}}></input>
-            <input type="submit" value="Mark Delivered"></input>
+            <input type="submit" value="Mark Collected"></input>
         </form>
 
         <br><br>

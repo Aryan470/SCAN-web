@@ -6,10 +6,10 @@ for (i = 0; i < dates.length; i++) {
     dates[i].innerHTML = thisDate.format("M/D");
 }
 for (i = 0; i < times.length; i++) {
-    var thisTime = moment(new Date(times[i].innerHTML));
+    var thisTime = moment.utc(new Date(times[i].innerHTML)).local();
     times[i].innerHTML = thisTime.format("h:mm A");
 }
 for (i = 0; i < datetimes.length; i++) {
-    var thisDateTime = moment(new Date(datetimes[i].innerHTML));
+    var thisDateTime = moment.utc(new Date(datetimes[i].innerHTML)).local();
     datetimes[i].innerHTML = thisDateTime.format("M/D h:mm A");
 }
