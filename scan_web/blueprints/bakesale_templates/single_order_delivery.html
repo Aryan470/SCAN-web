@@ -20,6 +20,7 @@
         {% if order.notes is defined %}
             <p><b>Notes:</b> {{order.notes}}</p>
         {% endif %}
+        <a href="{{url_for("bakesale.report_issue", orderID=order.orderID, view=request.args.get("view"))}}">Report an issue</a>
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
         <a href={{url_for("bakesale.deliver_item", orderID=order.orderID, address=order.userInfo.address, price=order.price)}}><h2>Deliver this</h2></a>

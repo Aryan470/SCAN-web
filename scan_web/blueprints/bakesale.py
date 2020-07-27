@@ -84,6 +84,34 @@ product_data = load_product_data()
 def index():
     return render_template("index.html")
 
+@bakesale.route("/report_issue", methods=["GET", "POST"])
+def report_issue():
+    if request.method == "GET":
+        return render_template("issue_form.html", orderID=request.args.get("orderID"), view=request.args.get("view"))
+
+    issue = {
+        "description": request.form["description"],
+        "UTC_timestamp": str(datetime.utcnow()) + " UTC",
+        "resolved": False
+    }
+
+    orderID = request.form["orderID"]
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    
+    order_dict = order_obj.to_dict()
+    if "issues" in order_dict:
+        order_dict["issues"].append(issue)
+    else:
+        order_dict["issues"] = [issue]
+    order_dict["has_unresolved_issues"] = True
+    
+    order_ref.set(order_dict)
+    flash("We are sorry that you had an issue with this order, a member of the SCAN team will look at it as soon as possible. Thank you.")
+    return redirect(url_for("bakesale.show_order", orderID=orderID, view=request.form["view"]))
+
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
     if "referral" in request.args:
@@ -289,6 +317,41 @@ def deliver_item():
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))
 
+@bakesale.route("/resolveissue", methods=["GET", "POST"])
+def resolve_issue():
+    if "uid" not in session or session["uid"] not in admin_uids:
+        return redirect(url_for("auth.login"))
+    
+    if request.method == "GET":
+        return render_template("resolve_issue_form.html", orderID=request.args.get("orderID"),
+        issue_description=request.args.get("issue_description"), issue_index=request.args.get("issue_index"))
+    
+    orderID = request.form["orderID"]
+    issue_index = int(request.form["issue_index"])
+
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    
+    order = order_obj.to_dict()
+    if issue_index < 0 or issue_index >= len(order["issues"]):
+        abort(400, "Invalid issue index")
+    order["issues"][issue_index]["resolved"] = True
+    order["issues"][issue_index]["resolved_by"] = {
+        "uid": session["uid"],
+        "name": session["name"]
+    }
+
+    all_resolved = True
+    for issue in order["issues"]:
+        if not issue["resolved"]:
+            all_resolved = False
+    
+    order["has_unresolved_issues"] = not all_resolved
+    order_ref.set(order)
+    return redirect(url_for("bakesale.admin_view"))
+
 @bakesale.route("/collectitem", methods=["GET", "POST"])
 def collect_item():
     if "uid" not in session or session["uid"] not in admin_uids:
@@ -370,7 +433,8 @@ def admin_view():
         return redirect(url_for("auth.login"))
     
     delivered_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.delivered", "==", True).where("status.collected", "==", False).order_by("UTC_timestamp").stream()]
-    return render_template("admin_view.html", delivered=delivered_orders)
+    issue_orders = [order.to_dict() for order in fireClient.collection("orders").where("has_unresolved_issues", "==", True).order_by("UTC_timestamp").stream()]
+    return render_template("admin_view.html", delivered=delivered_orders, issue_orders=issue_orders)
 
 @bakesale.route("/profile/<uid>", methods=["GET"])
 def view_profile(uid):

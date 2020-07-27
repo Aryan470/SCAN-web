@@ -28,9 +28,20 @@
         {% if order.notes is defined %}
             <p><b>Notes:</b> {{order.notes}}</p>
         {% endif %}
+        <a href="{{url_for("bakesale.report_issue", orderID=order.orderID, view=request.args.get("view"))}}">Report an issue</a>
+        {% if order.issues is defined %}
+            <h3>Issues</h3>
+            <ul>
+            {% for issue in order.issues %}
+                <li>(<span class="datetime">{{issue.UTC_timestamp}}</span>, {% if issue.resolved %}Resolved{% else %}Unresolved{%endif%}): {{issue.description}}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
-        <a href={{url_for("bakesale.collect_item", orderID=order.orderID, price=order.price, deliverer_id=order.delivery.deliveredBy.uid, deliverer_name=order.delivery.deliveredBy.name)}}><h2>Collect this</h2></a>
+        {% if order.delivery is defined %}
+            <a href={{url_for("bakesale.collect_item", orderID=order.orderID, price=order.price, deliverer_id=order.delivery.deliveredBy.uid, deliverer_name=order.delivery.deliveredBy.name)}}><h2>Collect this</h2></a>
+        {% endif %}
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
             <h5>{{product_data[category].name}}</h5>
