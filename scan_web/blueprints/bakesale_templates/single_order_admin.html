@@ -15,6 +15,7 @@
                 <li>Delivered by: <a href="{{url_for("bakesale.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></li>
                 <li>Delivered at: <span class="datetime">{{order.delivery.UTC_timestamp}}</span<</li>
             </ul>
+            <br>
         {% endif %}
         {% if order.collection is defined %}
             <p><b>Collection Information:</b></p>
@@ -22,6 +23,10 @@
                 <li>Collection by: <a href="{{url_for("bakesale.view_profile", uid=order.collection.collector.uid)}}">{{order.collection.collector.name}}</a></li>
                 <li>Collection at: <span class="datetime">{{order.collection.UTC_timestamp}}</span<</li>
             </ul>
+            <br>
+        {% endif %}
+        {% if order.notes is defined %}
+            <p><b>Notes:</b> {{order.notes}}</p>
         {% endif %}
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>

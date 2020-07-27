@@ -86,6 +86,8 @@ def index():
 
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
+    if "referral" in request.args:
+        return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"))
     return render_template("orderform.html", product_data=product_data, number_names=number_names)
 
 @bakesale.route("/submit_order", methods=["GET"])
@@ -131,6 +133,13 @@ def submit_order():
             "collected": False
         }
     }
+
+    if "notes" in request.args:
+        order["notes"] = request.args.get("notes")
+    
+    if "referral" in request.args:
+        order["referral"] = request.args.get("referral")
+    
     increment_count("received")
 
     fireClient.collection("orders").document(order["orderID"]).set(order)

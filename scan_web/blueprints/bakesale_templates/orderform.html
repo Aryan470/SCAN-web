@@ -34,14 +34,13 @@
 
             <fieldset class="infoset">
                 <legend class="personalinfolabel">Personal Info</legend>
-
                 <table>
                     <tr>
                         <td>
                             <label class="infolabel" for="name">Full Name: </label>
                         </td>
                         <td>
-                            <input class="infotext" type="text" name="name" required>
+                            <input class="infotext" type="text" name="name" placeholder="Enter your name" required>
                         </td>
                     </tr>
 
@@ -50,7 +49,7 @@
                             <label class="infolabel" for="phone">Phone Number: </label>
                         </td>
                         <td>
-                            <input class="infotext" type="tel" name="phone" required>
+                            <input class="infotext" type="tel" name="phone" placeholder="Enter your phone number" required>
                         </td>
                     </tr>
 
@@ -59,7 +58,7 @@
                             <label class="infolabel" for="email">Email Address: </label>
                         </td>
                         <td>
-                            <input class="infotext" type="mail" name="email" required>
+                            <input class="infotext" type="mail" name="email" placeholder="Enter your email address" required>
                         </td>
                     </tr>
 
@@ -68,7 +67,16 @@
                             <label class="infolabel" for="address">Address: </label>
                         </td>
                         <td>
-                            <input class="infotext" type="text" name="address" required>
+                            <input class="infotext" type="text" name="address" placeholder="Enter your address" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class="infolabel" for="notes">Notes: </label>
+                        </td>
+                        <td>
+                            <textarea class="infotext" name="notes" rows=4 placeholder="Enter anything you'd like the bakers or deliverers to know"></textarea>
                         </td>
                     </tr>
                 </table>
@@ -99,7 +107,10 @@
             <br>
             <output class="pricedisplay" name="price" id="pricedisplay">Total Price: $0.00</output>
             <br><br>
-            <input class="button" type="submit" value="Submit Order"></submit>
+            <input class="button" type="submit" value="Submit Order"></input>
+            {% if referral is defined %}
+                <input type="hidden" name="referral" value="{{referral}}"></input>
+            {% endif %}
         </form>
         <br><br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
