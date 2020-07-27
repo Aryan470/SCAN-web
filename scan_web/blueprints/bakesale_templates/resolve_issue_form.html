@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>SCAN Issue Resolution Form</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Issue Resolution Form</h1>
+
+        <p>Are you sure you resolved this issue:</p>
+        <blockquote>
+            <q>{{issue_description}}</q>
+        </blockquote>
+        <p>Order ID: {{orderID}}</p>
+        <a href="{{url_for("bakesale.show_order", orderID=orderID, view="admin")}}">Link to order</p>
+        <form action="{{url_for("bakesale.resolve_issue")}}" method="POST">
+            <input type="hidden" name="orderID" value={{orderID}}></input>
+            <input type="hidden" name="issue_index" value={{issue_index}}></input>
+            <input type="submit" value="Mark Resolved"></input>
+        </form>
+
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>

@@ -35,8 +35,29 @@
         <h3>Statistics</h3>
         <p>work in progress</p>
         <br>
-        <h3>Reports</h3>
-        <p>work in progress</p>
+        <h3>Order Issues</h3>
+            <table border=1>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Issue Timestamp</th>
+                    <th>Issue Description</th>
+                    <th>Order Link</th>
+                    <th>Action</th>
+                </tr>
+                {% for order in issue_orders %}
+                    {% for issue in order.issues %}
+                        {% if not issue.resolved %}
+                            <tr>
+                                <td class="datetime">{{order.UTC_timestamp}}</td>
+                                <td class="datetime">{{issue.UTC_timestamp}}</td>
+                                <td>{{issue.description}}</td>
+                                <td><a href="{{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}">{{order.orderID}}</a></td>
+                                <td><a href="{{url_for("bakesale.resolve_issue", orderID=order.orderID, issue_index=loop.index0, issue_description=issue.description)}}">Mark Resolved</a></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            <table>
         <br><br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>

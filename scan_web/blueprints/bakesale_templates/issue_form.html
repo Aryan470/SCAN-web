@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>SCAN Order Issue Form</title>
+    </head>
+    <body>
+        <h1>SCAN Order Issue Form</h1>
+
+        <p>We are sorry to hear you are having an issue with this order. Please submit this form so we can quickly address your issue.</p>
+        <p>Order ID: {{orderID}}</p>
+        <a href="{{url_for("bakesale.show_order", orderID=orderID, view=view)}}">Link to order</a>
+        <br>
+        <br>
+        <form action="{{url_for("bakesale.report_issue")}}" method="POST">
+            <input type="hidden" name="orderID" value={{orderID}}></input>
+            <input type="hidden" name="view" value={{view}}></input>
+
+            <label for="description">Issue Description:</label>
+            <br>
+            <textarea name="description" placeholder="Please describe your issue" cols=50 rows=10></textarea>
+            <br>
+            <br>
+            <input type="submit" value="Submit Report"></input>
+        </form>
+
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>
