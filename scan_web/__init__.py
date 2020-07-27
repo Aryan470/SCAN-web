@@ -9,6 +9,7 @@ fireClient = firestore.client()
 
 from flask import Flask, render_template, session, redirect, request, url_for
 from scan_web.blueprints import bakesale, auth
+# from scan_web import product_management
 
 def create_app():
     app = Flask(__name__)
