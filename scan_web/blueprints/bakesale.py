@@ -91,7 +91,7 @@ def report_issue():
 
     issue = {
         "description": request.form["description"],
-        "UTC_timestamp": str(datetime.utcnow()) + " UTC",
+        "UTC_timestamp": str(datetime.utcnow()),
         "resolved": False
     }
 
@@ -151,7 +151,7 @@ def submit_order():
         "userInfo": userInfo,
         "price": price,
         "quantities": quantities,
-        "UTC_timestamp": str(datetime.utcnow()) + " UTC",
+        "UTC_timestamp": str(datetime.utcnow()),
         "orderID": str(uuid4()),
         "fulfillment": fulfillment,
         "status": {
@@ -274,7 +274,7 @@ def bake_item():
     if allMet:
         order_dict["status"]["baked"] = allMet
         order_dict["baking"] = {
-            "UTC_timestamp": str(datetime.utcnow()) + " UTC",
+            "UTC_timestamp": str(datetime.utcnow()),
         }
         increment_count("baked")
         update_stats("received", "baked", order_dict["UTC_timestamp"], order_dict["baking"]["UTC_timestamp"])
@@ -306,7 +306,7 @@ def deliver_item():
             "uid": uid,
             "name": session["name"]
         },
-        "UTC_timestamp": str(datetime.utcnow()) + " UTC"
+        "UTC_timestamp": str(datetime.utcnow())
     }
 
     increment_count("delivered")
@@ -379,7 +379,7 @@ def collect_item():
             "uid": session["uid"],
             "name": session["name"]
         },
-        "UTC_timestamp": str(datetime.utcnow()) + " UTC"
+        "UTC_timestamp": str(datetime.utcnow())
     }
     increment_count("collected")
     update_stats("received", "collected", order_dict["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
