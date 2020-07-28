@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>SCAN Sales Leaderboard</title>
+    </head>
+    <body>
+        <h1>SCAN Sales Leaderboard</h1>
+
+        <table border=1>
+            <tr>
+                <th>Rank</th>
+                <th>Referral</th>
+                <th>Total Sales</th>
+            </tr>
+            {% for referral, total in leaderboard|dictsort(by="value", reverse=True) %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{referral}}</td>
+                    <td>{{"$%.2f"|format(total)}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+    </body>
+</html>
