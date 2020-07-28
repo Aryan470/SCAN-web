@@ -142,6 +142,8 @@ def submit_order():
     
     if "referral" in request.args:
         order["referral"] = request.args.get("referral")
+        if request.args.get("referral") != "instagram":
+            update_leaderboard(request.args.get("referral"), order["price"])
     
     increment_count("received")
 
@@ -159,6 +161,10 @@ def submit_order():
         flash("An error occurred while sending an email, please save this link to access your order.")
     return redirect(url_for("bakesale.show_order", orderID=order["orderID"]))
 
+@bakesale.route("/leaderboard", methods=["GET"])
+def display_leaderboard():
+    leaderboard = fireClient.collection("statistics").document("sales").get().to_dict()["leaderboard"]
+    return render_template("leaderboard.html", leaderboard=leaderboard)
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
 def show_order(orderID):
@@ -443,6 +449,12 @@ def send_mail(recipient, subject, plain_content, html_content=None):
         server.login(sender_email, password)
         server.sendmail(sender_email, recipient, message.as_string())
         server.quit()
+
+def update_leaderboard(referral_link, amount):
+    leaderboard_ref = fireClient.collection("statistics").document("sales")
+    sales = leaderboard_ref.get().to_dict()
+    sales["leaderboard"][referral_link] = sales["leaderboard"].get(referral_link, 0.0) + amount
+    leaderboard_ref.set(sales)
 
 def increment_count(category):
     count_ref = fireClient.collection("statistics").document("counts")
