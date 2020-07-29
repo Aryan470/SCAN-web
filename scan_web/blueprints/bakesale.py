@@ -463,7 +463,7 @@ def increment_count(category):
     count_ref.set(count_dict)
 
 def update_stats(start_category, end_category, start_timestamp, end_timestamp):
-    fmt = "%Y-%m-%d %H:%M:%S.%f UTC"
+    fmt = "%Y-%m-%d %H:%M:%S.%f"
     start_datetime = datetime.strptime(start_timestamp, fmt)
     end_datetime = datetime.strptime(end_timestamp, fmt)
     # total seconds divided by seconds in a day
