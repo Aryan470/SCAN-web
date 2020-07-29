@@ -35,7 +35,16 @@ exec_referral_links = [
     "Alekhya_Vattikuti".lower(),
     "Kaavya_Pari".lower(),
     "Avani_Sunkireddy".lower(),
-    "Aryan_Khatri".lower()
+    "Aryan_Khatri".lower(),
+    "PranavKousik".lower(),
+    "HarshiniThangaRajMalini".lower(),
+    "KrishaPrabakaran".lower(),
+    "KavinPari".lower(),
+    "AmayaSankaran".lower(),
+    "AlekhyaVattikuti".lower(),
+    "KaavyaPari".lower(),
+    "AvaniSunkireddy".lower(),
+    "AryanKhatri".lower()
 ]
 admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1"]
 
@@ -104,11 +113,11 @@ def orderform():
         return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"))
     return render_template("orderform.html", product_data=product_data, number_names=number_names)
 
-@bakesale.route("/submit_order", methods=["GET"])
+@bakesale.route("/submit_order", methods=["POST"])
 def submit_order():
     userInfo = {}
     for userVar in userVars:
-        userInfo[userVar] = request.args.get(userVar, default="N/A")
+        userInfo[userVar] = request.form.get(userVar, "N/A")
 
     quantities = {}
     fulfillment = {}
@@ -118,8 +127,8 @@ def submit_order():
         quantities[category_id] = {}
         fulfillment[category_id] = {}
         for product_id in product_data[category_id]["products"]:
-            if request.args.get(product_id, default=0, type=int) > 0:
-                quantities[category_id][product_id] = request.args.get(product_id, default=0, type=int)
+            if int(request.form.get(product_id, 0)) > 0:
+                quantities[category_id][product_id] = int(request.form.get(product_id, 0))
                 fulfillment[category_id][product_id] = {
                     "count": 0,
                     "bakers": {}
@@ -148,13 +157,13 @@ def submit_order():
         }
     }
 
-    if "notes" in request.args:
-        order["notes"] = request.args.get("notes")
+    if "notes" in request.form:
+        order["notes"] = request.form["notes"]
     
-    if "referral" in request.args:
-        order["referral"] = request.args.get("referral")
-        if request.args.get("referral") != "instagram":
-            update_leaderboard(request.args.get("referral"), order["price"])
+    if "referral" in request.form:
+        order["referral"] = request.form["referral"]
+        if request.form["referral"] != "instagram":
+            update_leaderboard(request.form["referral"], order["price"])
     
     increment_count("received")
 

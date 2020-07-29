@@ -8,7 +8,7 @@
     <body>
         <!--<script src="{{url_for("static", filename="calculate_price.js")}}"></script>-->
         <h1 class="title">SCAN Bake Sale</h1>
-        <form action="/bakesale/submit_order" oninput="updateForm()">
+        <form action="/bakesale/submit_order" oninput="updateForm()" method="POST">
             {% for category, category_data in product_data|dictsort(reverse=True) %}
                 <fieldset class="categoryset">
                     <legend class="categorylabel collapsible">{{category_data.name}}
