@@ -161,9 +161,9 @@ def submit_order():
         order["notes"] = request.form["notes"]
     
     if "referral" in request.form:
-        order["referral"] = request.form["referral"]
+        order["referral"] = request.form["referral"].lower()
         if request.form["referral"] != "instagram":
-            update_leaderboard(request.form["referral"], order["price"])
+            update_leaderboard(request.form["referral"].lower(), order["price"])
     
     increment_count("received")
 
