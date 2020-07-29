@@ -11,6 +11,8 @@ auth = Blueprint("auth", __name__, template_folder="auth_templates")
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        if "redirect" in request.args:
+            return render_template("login.html", redirect=request.args.get("redirect"))
         return render_template("login.html")
     
     try:
@@ -30,7 +32,12 @@ def login():
         session["name"] = fireClient.collection("users").document(uid).get().to_dict()["name"]
     except:
         return redirect(url_for("bakesale.edit_profile"))
-    return redirect(url_for("bakesale.index"))
+    print(request.json)
+    if "redirect" in request.json:
+        return redirect(url_for(request.json["redirect"]))
+    else:
+        print("NO REDIRECT")
+        return redirect(url_for("bakesale.index"))
 
 @auth.route("/logout", methods=["GET"])
 def logout():

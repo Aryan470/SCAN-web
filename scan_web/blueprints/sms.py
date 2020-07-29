@@ -10,11 +10,12 @@ sms = Blueprint("sms", __name__, template_folder="sms_templates")
 
 @sms.route("/")
 def index():
-    return redirect("sms.view_messages")
+    return redirect(url_for("sms.view_messages"))
 
+@sms.route("/messages")
 def view_messages():
     if "uid" not in session:
-        return redirect("auth.login")
+        return redirect(url_for("auth.login", redirect="sms.view_messages"))
     
     my_messages = [message.to_dict() for message in fireClient.collection("messages").where("sender", "==", session["uid"]).stream()]
     return render_template("messages.html", messages=my_messages)
