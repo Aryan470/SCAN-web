@@ -26,6 +26,17 @@ number_names = {
     6: "a half dozen",
     12: "a dozen"
 }
+exec_referral_links = [
+    "Pranav_Kousik".lower(),
+    "Harshini_ThangaRajMalini".lower(),
+    "Krisha_Prabakaran".lower(),
+    "Kavin_Pari".lower(),
+    "Amaya_Sankaran".lower(),
+    "Alekhya_Vattikuti".lower(),
+    "Kaavya_Pari".lower(),
+    "Avani_Sunkireddy".lower(),
+    "Aryan_Khatri".lower()
+]
 admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1"]
 
 @bakesale.route("/reloadproducts")
@@ -164,7 +175,7 @@ def submit_order():
 @bakesale.route("/leaderboard", methods=["GET"])
 def display_leaderboard():
     leaderboard = fireClient.collection("statistics").document("sales").get().to_dict()["leaderboard"]
-    return render_template("leaderboard.html", leaderboard=leaderboard)
+    return render_template("leaderboard.html", leaderboard={referral: leaderboard[referral] for referral in leaderboard if referral.lower() not in exec_referral_links})
 
 @bakesale.route("/order/<orderID>", methods=["GET"])
 def show_order(orderID):
