@@ -10,6 +10,9 @@
         <label for="pass">Password:</label>
         <input type="password" name="pass" id="pass"></input>
         <br>
+        {% if redirect is defined %}
+        <input type="hidden" name="redirect" value="{{redirect}}"></input>
+        {% endif %}
         <button onclick="doLogin()">Login</button>
         <br>
         <!--<button onclick="doSignup()">Sign Up</button>
@@ -59,7 +62,9 @@
                             xhr.open("POST", "{{url_for("auth.login")}}", true);
                             xhr.setRequestHeader('Content-Type', 'application/json');
                             xhr.send(JSON.stringify({
-                                "idToken": idToken
+                                "idToken": idToken{% if redirect is defined %},
+                                "redirect": "{{redirect}}"{% endif %}
+
                             }));
                             xhr.onreadystatechange = function () {
                                 if (xhr.readyState === XMLHttpRequest.DONE) {
