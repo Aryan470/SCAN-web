@@ -21,7 +21,7 @@
                     <td>${{'%0.2f' % order.price}}</td>
                     <td>{{order.notes}}</td>
                     <td>{{order.referral}}</td>
-                    <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}>Click Me</a></td>
+                    <td><a href="{{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}">{{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}</a></td>
                 </tr>
             {% endfor %}
         </table>
