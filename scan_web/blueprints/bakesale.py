@@ -437,6 +437,12 @@ def admin_view():
     issue_orders = [order.to_dict() for order in fireClient.collection("orders").where("has_unresolved_issues", "==", True).order_by("UTC_timestamp").stream()]
     return render_template("admin_view.html", delivered=delivered_orders, issue_orders=issue_orders)
 
+@bakesale.route("/adminview/collected", methods=["GET"])
+def admin_collected_view():
+    collected_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.collected", "==", True).order_by("UTC_timestamp").stream()]
+    return render_template("admin_collected_orders.html", collected=collected_orders)
+
+
 @bakesale.route("/profile/<uid>", methods=["GET"])
 def view_profile(uid):
     user_ref = fireClient.collection("users").document(uid)

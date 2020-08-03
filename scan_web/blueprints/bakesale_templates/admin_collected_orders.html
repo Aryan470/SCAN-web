@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>SCAN Admin View</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Admin View</h1>
+        <table border="1">
+            <caption><b>Collected Orders</b></caption>
+            <tr>
+                <th>UTC Timestamp</th>
+                <th>Price</th>
+                <th>Notes</th>
+                <th>Referral</th>
+                <th>Link</th>
+            </tr>
+
+            {% for order in collected %}
+                <tr>
+                    <td>{{order.UTC_timestamp}}</td>
+                    <td>${{'%0.2f' % order.price}}</td>
+                    <td>{{order.notes}}</td>
+                    <td>{{order.referral}}</td>
+                    <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}>Click Me</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{{url_for("bakesale.admin_view")}}">Back to Admin Home</a>
+        <br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="{{url_for("static", filename="render_times.js")}}"></script>
+    </body>
+</html>
