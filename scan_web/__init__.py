@@ -21,7 +21,8 @@ def create_app():
     else:
         app.secret_key = "DEVELOPMENT"
 
-    app.register_blueprint(bakesale.bakesale, subdomain="bakesale")
+    if os.environ["CONTEXT"] == "PROD":
+        app.register_blueprint(bakesale.bakesale, subdomain="bakesale")
     app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
     app.register_blueprint(auth.auth, url_prefix="/auth")
     app.register_blueprint(sms.sms, url_prefix="/sms")
