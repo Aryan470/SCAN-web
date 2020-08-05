@@ -1,6 +1,6 @@
 from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
 import firebase_admin
-from firebase_admin.auth import verify_id_token
+import firebase_admin.auth as firebase_auth
 from datetime import datetime
 from uuid import uuid4
 from scan_web import fireClient
@@ -21,7 +21,7 @@ def login():
         abort(400, "Request must include id token from login page")
     
     try:
-        verified_dict = verify_id_token(idToken)
+        verified_dict = firebase_auth.verify_id_token(idToken)
         uid = verified_dict["uid"]
     except:
         abort(400, "Invalid ID token")
@@ -46,3 +46,35 @@ def logout():
     if "name" in session:
         session.pop("name")
     return redirect(url_for("bakesale.index"))
+
+@auth.route("/createuser", methods=["POST"])
+def create_user():
+    if not request.form:
+        abort(400, "Request must include form data")
+    try:
+        new_user = {
+            "email": request.form["email"],
+            "first_name": request.form["first_name"],
+            "last_name": request.form["last_name"],
+            "grade": request.form["grade"],
+            "school": request.form["school"],
+            "phone": request.form["phone"]
+        }
+    except:
+        abort(400, "Malformed form data")
+    if not new_user["phone"]:
+        new_user.pop("pheon")
+    elif "+" not in new_user["phone"]:
+        new_user["phone"] = "+1" + new_user["phone"]
+    
+    try:
+        firebase_user = firebase_auth.create_user(
+            email=new_user["email"],
+            email_verified=False,
+            phone_number=new_user.get("phone", None),
+            password="members not allowed",
+            display_name=str("%s %s" % (new_user["first_name"], new_user["last_name"]))
+        )
+    except BaseException as e:
+        abort(400, "User could not be created: %s" % str(e))
+    return {"success": True}
