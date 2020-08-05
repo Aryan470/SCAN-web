@@ -2,7 +2,6 @@ from flask import Blueprint, request, abort, jsonify, render_template, redirect,
 from datetime import datetime
 from uuid import uuid4
 from scan_web import fireClient
-from uuid import uuid4
 import smtplib
 import ssl
 from email.mime.multipart import MIMEMultipart
