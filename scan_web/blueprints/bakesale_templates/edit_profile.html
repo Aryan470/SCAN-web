@@ -18,7 +18,7 @@
                     <option value="{{role}}" {% if user.role == role %}selected="selected"{% endif %}>{{name}}</option>
                 {% endfor %}
             </select>
-            <input type="hidden" name="uid" id="uid" value="{{user.uid}}"></input>
+            <input type="hidden" name="uid" id="uid" value="{{session["uid"]}}"></input>
             <br>
             <input type="submit"></input>
         </form>
