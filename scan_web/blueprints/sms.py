@@ -1,10 +1,5 @@
 from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
-import firebase_admin
-from firebase_admin.auth import verify_id_token
-from datetime import datetime
-from uuid import uuid4
 from scan_web import fireClient
-from uuid import uuid4
 
 sms = Blueprint("sms", __name__, template_folder="sms_templates")
 
