@@ -389,35 +389,6 @@ def collect_item():
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.admin_view"))
 
-@bakesale.route("/editprofile", methods=["GET", "POST"])
-def edit_profile():
-    if "uid" not in session:
-        return redirect(url_for("auth.login"))
-    
-    uid = session["uid"]
-    user_ref = fireClient.collection("users").document(uid)
-
-    if request.method == "GET":
-        user_obj = user_ref.get()
-        if user_obj.exists:
-            user_dict = user_obj.to_dict()
-        else:
-            user_dict = {"uid": uid}
-        return render_template("edit_profile.html", user=user_dict, rolenames=role_names)
-    else:
-        try:
-            user_dict = {}
-            if session["uid"] != request.form["uid"]:
-                abort(400, "UID does not match session")
-            user_dict["uid"] = session["uid"]
-            user_dict["name"] = request.form["name"]
-            user_dict["role"] = request.form["role"]
-            user_dict["phone"] = request.form["phone"]
-        except:
-            abort(400, "Malformed edit profile request")
-        
-        user_ref.set(user_dict)
-        return redirect(url_for("bakesale.view_profile", uid=session["uid"]))
 
 @bakesale.route("/deliveryview", methods=["GET"])
 def delivery_view():

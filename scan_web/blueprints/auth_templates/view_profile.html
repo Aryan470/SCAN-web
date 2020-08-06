@@ -3,9 +3,9 @@
         <title>SCAN Profile</title>
     <head>
     <body>
-        <h1>{{user.name}}'s Profile</h1>
-        <p>Phone: <a href="tel:{{user.phone}}">{{user.phone}}</a></p>
-        <p>Role: {{rolenames[user.role]}}</p>
+        <h1>{{user.display_name}}'s Profile</h1>
+        <p>Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
+        <p>Phone: <a href="tel:{{user.phone_number}}">{{user.phone_number}}</a></p>
         <p>UserID: {{user.uid}}</p>
         <br><br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
