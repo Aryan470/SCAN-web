@@ -5,6 +5,9 @@
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS Template View</h1>
+        <a href="{{url_for("sms.create_template")}}">Create a new template</a>
+        <br>
+        <br>
         <table border=1>
             <tr>
                 <th>

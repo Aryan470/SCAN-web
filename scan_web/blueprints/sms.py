@@ -30,12 +30,33 @@ access_property = {
     "PHONE": lambda user: user.phone_number
 }
 
-# find bracketed content, check to see if it exists in access_property, substitute
 def render_message(template, user):
-    properties = {property_name: access_property[property_name](user) for property_name in access_property}
-    for property_name in properties:
-        template.replace(property_name, properties[property_name])
+    property_values = {property_name: access_property[property_name](user) for property_name in access_property}
+    for property_name in property_values:
+        template.replace(property_name, property_values[property_name])
     
+
+@sms.route("/generatetemplate/<template_id>", methods=["POST"])
+def generate_template(template_id):
+    template_ref = fireClient.collection("message_templates").document(template_id)
+    template_obj = template_ref.get()
+    if not template_obj.exists:
+        abort(404, "Template not found")
+    template = template_obj.to_dict()
+    if template["generated"]:
+        abort(410, "Template's messages have already been generated")
+    new_messages_batch = fireClient.batch()
+    for uid in template["recipients"]:
+        try:
+            msg_ref = fireClient.collection("messages").document()
+            user = firebase_auth.get_user(uid)
+            msg = {
+                "content": render_message(template["template"], user),
+                "sender": random.choice(officer_uids),
+                "phone": user.phone_number
+            }
+            new_messages_batch.set(msg_ref, msg)
+    new_messages_batch.commit()
 
 
 @sms.route("/createtemplate", methods=["GET", "POST"])
