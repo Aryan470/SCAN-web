@@ -1,10 +1,13 @@
 import random
 from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
 import firebase_admin.auth as firebase_auth
+import firebase_admin.firestore as firestore
 from scan_web import fireClient
+from datetime import datetime
 
 sms = Blueprint("sms", __name__, template_folder="sms_templates")
 
+ambassador_uids = [officer.to_dict()["uid"] for officer in fireClient.collection("users").where("tier", "==", "ambassador").stream()]
 officer_uids = [officer.to_dict()["uid"] for officer in fireClient.collection("users").where("tier", "==", "officer").stream()]
 
 @sms.route("/")
@@ -35,15 +38,38 @@ def render_message(template, user):
     
 
 
-@sms.route("/createmessage", methods=["GET", "POST"])
-def create_message():
+@sms.route("/createtemplate", methods=["GET", "POST"])
+def create_template():
     if "uid" not in session:
         return redirect(url_for("auth.login", redirect="sms.create_message"))
     user_obj = fireClient.collection("users").document(session["uid"]).get()
     if not user_obj.exists or user_obj.to_dict().get("tier", "") != "officer":
         abort(401)
     if request.method == "GET":
-        return render_template("create_message.html", available_data=access_property)
-    template = request.form["template"]
-    for user in firebase_auth.list_users().iterate_all():
-        fireClient.collection("messages").add(render_message(template, user))
+        return render_template("create_template.html", available_data=access_property)
+    template = {
+        "template": request.form["template"],
+        "author": {
+            "uid": session["uid"],
+            "name": session["name"]
+        },
+        "generated": False,
+        "recipients": {user.uid: False for user in firebase_auth.list_users().iterate_all() if user.uid not in officer_uids and user.uid not in ambassador_uids},
+        "UTC_timestamp": str(datetime.utcnow())
+    }
+    template_obj = fireClient.collection("message_templates").document()
+    fireClient.collection("message_templates").document(template_obj.id).set(template)
+    return redirect(url_for("sms.view_template", template_id=template_obj.id))
+
+@sms.route("/viewtemplates")
+def view_templates():
+    message_templates = [template for template in fireClient.collection("message_templates").order_by("UTC_timestamp", direction=firestore.Query.DESCENDING).stream()]
+    return render_template("view_templates.html", templates=message_templates)
+
+@sms.route("/viewtemplate/<template_id>")
+def view_template(template_id):
+    template_ref = fireClient.collection("message_templates").document(template_id)
+    template_obj = template_ref.get()
+    if not template_obj.exists:
+        abort(404, "Template not found")
+    return render_template("view_template.html", template=template_obj.to_dict(), template_obj=template_obj)

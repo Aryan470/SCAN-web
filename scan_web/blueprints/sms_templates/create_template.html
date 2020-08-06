@@ -5,13 +5,19 @@
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS Creation</h1>
-        <form action="{{url_for("sms.create_message")}}" method="POST">
+        <form action="{{url_for("sms.create_template")}}" method="POST">
             <label for="template"><b>Message Template</b></label>
             <br>
             <textarea name="template" id="template" rows=10 cols=100 placeholder="Enter the template, using placeholders such as [FIRSTNAME]" required></textarea>
             <br>
             <input type="submit"></input>
         </form>
+        <h3>Available Data</h3>
+        <ol>
+            {% for prop in available_data %}
+                <li>{{prop}}</li>
+            {% endfor %}
+        </ol>
         <br><br>
         <a href="{{url_for("sms.index")}}">Back to home</a>
         <br>
