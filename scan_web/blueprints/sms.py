@@ -33,7 +33,8 @@ access_property = {
 def render_message(template, user):
     property_values = {property_name: access_property[property_name](user) for property_name in access_property}
     for property_name in property_values:
-        template.replace(property_name, property_values[property_name])
+        template = template.replace("[" + property_name + "]", property_values[property_name])
+    return template
     
 
 @sms.route("/generatetemplate/<template_id>", methods=["POST"])
@@ -46,17 +47,31 @@ def generate_template(template_id):
     if template["generated"]:
         abort(410, "Template's messages have already been generated")
     new_messages_batch = fireClient.batch()
+    num_errors = 0
+    error_threshold = 0.05
     for uid in template["recipients"]:
+        # If the error rate for message generation exceeds 5%, stop it
+        if num_errors / len(template["recipients"]) > error_threshold:
+            break
         try:
             msg_ref = fireClient.collection("messages").document()
             user = firebase_auth.get_user(uid)
             msg = {
                 "content": render_message(template["template"], user),
                 "sender": random.choice(officer_uids),
+                "recipient": uid,
                 "phone": user.phone_number
             }
             new_messages_batch.set(msg_ref, msg)
-    new_messages_batch.commit()
+        except:
+            num_errors += 1
+    if num_errors / len(template["recipients"]) > error_threshold:
+        abort(400, "The error rate for generating messages exceeded %0.2f%%, generation cancelled" % (100 * error_threshold))
+    else:
+        new_messages_batch.commit()
+        template["generated"] = True
+        template_ref.set(template)
+        return redirect(url_for("sms.view_template", template_id=template_obj.id))
 
 
 @sms.route("/createtemplate", methods=["GET", "POST"])
