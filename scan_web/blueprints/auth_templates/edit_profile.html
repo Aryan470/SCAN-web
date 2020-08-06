@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>SCAN Profile</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Profile Editor</h1>
+        <form action="{{url_for("auth.edit_profile")}}" method="POST">
+            <label for="name"><b>Name</b></label>
+            <input type="text" name="name" id="name" value="{{user.display_name}}" placeholder="Enter your name" required></input>
+            <br>
+            <label for="email"><b>Email</b></label>
+            <input type="email" name="email" id="email" value="{{user.email}}" placeholder="Enter your email" required></input>
+            <br>
+            <label for="phone"><b>Phone Number</b></label>
+            <input type="tel" name="phone" id="phone" value="{{user.phone_number}}" placeholder="Enter your phone number" required></input>
+            <p>If you have a non-US number, please include the country code.<br>Example for India (+91): +911234567890</p>
+            <input type="hidden" name="uid" id="uid" value="{{session["uid"]}}"></input>
+            <br>
+            <input type="submit"></input>
+        </form>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>

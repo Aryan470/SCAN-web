@@ -3,7 +3,7 @@
         <title>SCAN Admin View</title>
     </head>
     <body>
-        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("bakesale.edit_profile")}}">{{session["name"]}}</a></p>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Admin View</h1>
         <table border="1">
             <caption><b>Uncollected Orders</b></caption>
@@ -25,7 +25,7 @@
                     <td class="date">{{order.delivery.UTC_timestamp}}</td>
                     <td class="time">{{order.delivery.UTC_timestamp}}</td>
                     <td>{{order.userInfo.name}}</td>
-                    <td><a href="{{url_for("bakesale.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></td>
+                    <td><a href="{{url_for("auth.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></td>
                     <td>${{'%0.2f' % order.price}}</td>
                     <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}>Click Me</a></td>
                 </tr>
