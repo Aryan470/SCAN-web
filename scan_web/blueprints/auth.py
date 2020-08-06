@@ -27,11 +27,12 @@ def login():
         abort(400, "Invalid ID token")
     
     session["uid"] = uid
-    session["name"] = "Click to setup profile"
-    try:
-        session["name"] = fireClient.collection("users").document(uid).get().to_dict()["name"]
-    except:
-        return redirect(url_for("bakesale.edit_profile"))
+    user_info = firebase_auth.get_user(uid)
+    if user_info.display_name:
+        session["name"] = user_info.display_name
+    else:
+        session["name"] = "Click to setup profile"
+
     print(request.json)
     if "redirect" in request.json:
         return redirect(url_for(request.json["redirect"]))
