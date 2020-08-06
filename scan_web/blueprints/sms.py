@@ -19,7 +19,7 @@ def view_messages():
     if "uid" not in session:
         return redirect(url_for("auth.login", redirect="sms.view_messages"))
     
-    my_messages = [message.to_dict() for message in fireClient.collection("messages").where("sender", "==", session["uid"]).stream()]
+    my_messages = {message.id: message.to_dict() for message in fireClient.collection("messages").where("sender", "==", session["uid"]).where("sent", "==", False).stream()}
     return render_template("messages.html", messages=my_messages)
 
 
@@ -60,7 +60,9 @@ def generate_template(template_id):
                 "content": render_message(template["template"], user),
                 "sender": random.choice(officer_uids),
                 "recipient": uid,
-                "phone": user.phone_number
+                "phone": user.phone_number,
+                "sent": False,
+                "template_id": template_id
             }
             new_messages_batch.set(msg_ref, msg)
         except:
@@ -109,3 +111,27 @@ def view_template(template_id):
     if not template_obj.exists:
         abort(404, "Template not found")
     return render_template("view_template.html", template=template_obj.to_dict(), template_obj=template_obj)
+
+@sms.route("/marksent", methods=["POST"])
+def mark_sent():
+    sent_messages = request.form.getlist("sent")
+    if len(sent_messages) < 1:
+        return redirect(url_for("sms.view_messages"))
+    for message_id in sent_messages:
+        message_ref = fireClient.collection("messages").document(message_id)
+        message_obj = message_ref.get()
+        if not message_obj.exists:
+            continue
+        message = message_obj.to_dict()
+        message["sent"] = True
+        message_ref.set(message)
+
+        template_ref = fireClient.collection("message_templates").document(message["template_id"])
+        template_obj = template_ref.get()
+        if not template_obj.exists:
+            continue
+        template = template_obj.to_dict()
+        template["recipients"][message["recipient"]] = True
+        template_ref.set(template)
+    
+    return redirect(url_for("sms.view_messages"))

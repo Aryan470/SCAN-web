@@ -6,11 +6,36 @@
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS View</h1>
         <h2>Your Messages to Send:</h2>
-        <ol>
-            {% for message in messages %}
-                <li><a href="sms:{{message.phone}}&body={{message.content|urlencode()}}">{{message.phone}}</a></li>
+        <form action="{{url_for("sms.mark_sent")}}" method="POST">
+            <table border=1>
+                <tr>
+                    <th>
+                        Number
+                    </th>
+                    <th>
+                        Link
+                    </th>
+                    <th>
+                        Sent
+                    </th>
+                </tr>
+            {% for message_id, message in messages.items() %}
+                <tr>
+                    <td>
+                        {{loop.index}}
+                    </td>
+                    <td>
+                        <a href="sms:{{message.phone}}&body={{message.content|urlencode()}}">{{message.phone}}</a>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="sent" value="{{message_id}}"></input>
+                    </td>
+                </tr>
             {% endfor %}
-        </ol>
+            </table>
+            <br>
+            <input type="submit" value="Mark Sent"></input>
+        </form>
         <br><br>
         <a href="{{url_for("sms.view_templates")}}">Template View</a>
         <br>

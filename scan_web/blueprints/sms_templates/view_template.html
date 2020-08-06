@@ -3,6 +3,14 @@
         <title>SCAN SMS View</title>
     </head>
     <body>
+        <script>
+            function waitUser() {
+                document.getElementById("generate_form").removeChild(document.getElementById("submit_generation"));
+                var waitMessage = document.createElement("P");
+                waitMessage.appendChild(document.createTextNode("Please wait..."));
+                document.getElementById("generate_form").appendChild(waitMessage);
+            }
+        </script>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS Template View</h1>
 
@@ -15,8 +23,8 @@
         <h3>Status</h3>
         <p>{{template.recipients.values()|sum()}} out of {{template.get("recipients")|length}} sent ({{"%0.2f%%" % (100 * template.recipients.values()|sum() / template.get("recipients")|length)}})</p>
         {% if not template.generated %}
-            <form action="{{url_for("sms.generate_template", template_id=template_obj.id)}}" method="POST">
-                <input type="submit" value="Generate Messages"></input>
+            <form action="{{url_for("sms.generate_template", template_id=template_obj.id)}}" method="POST" id="generate_form" onsubmit="waitUser()">
+            <input type="submit" value="Generate Messages" id="submit_generation"></input>
             </form>
         {% else %}
             <p>Messages from this template have been generated and assigned</p>
