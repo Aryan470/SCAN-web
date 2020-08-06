@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>SCAN SMS View</title>
+    </head>
+    <body>
+        <script>
+            function waitUser() {
+                document.getElementById("generate_form").removeChild(document.getElementById("submit_generation"));
+                var waitMessage = document.createElement("P");
+                waitMessage.appendChild(document.createTextNode("Please wait..."));
+                document.getElementById("generate_form").appendChild(waitMessage);
+            }
+        </script>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN SMS Template View</h1>
+
+        <h3>Timestamp</h3>
+        <p class="datetime">{{template.UTC_timestamp}}</p>
+
+        <h3>Author</h3>
+        <a href="{{url_for("auth.view_profile", uid=template.author.uid)}}">{{template.author.name}}</a>
+
+        <h3>Status</h3>
+        <p>{{template.recipients.values()|sum()}} out of {{template.get("recipients")|length}} sent ({{"%0.2f%%" % (100 * template.recipients.values()|sum() / template.get("recipients")|length)}})</p>
+        {% if not template.generated %}
+            <form action="{{url_for("sms.generate_template", template_id=template_obj.id)}}" method="POST" id="generate_form" onsubmit="waitUser()">
+            <input type="submit" value="Generate Messages" id="submit_generation"></input>
+            </form>
+        {% else %}
+            <p>Messages from this template have been generated and assigned</p>
+        {% endif %}
+        <br>
+
+        <h3>Template</h3>
+        <pre><code>{{template.template}}</code></pre>
+
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="{{url_for("static", filename="render_times.js")}}"></script>
+    </body>
+</html>
