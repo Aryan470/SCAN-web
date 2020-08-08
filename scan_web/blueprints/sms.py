@@ -24,14 +24,15 @@ def view_messages():
 
 
 access_property = {
-    "FIRSTNAME": lambda user: user.display_name.split()[0],
-    "LASTNAME": lambda user: user.display_name.split()[1],
-    "EMAIL": lambda user: user.email,
-    "PHONE": lambda user: user.phone_number
+    "FIRSTNAME": lambda user, ctx: user.display_name.split()[0],
+    "LASTNAME": lambda user, ctx: user.display_name.split()[-1],
+    "EMAIL": lambda user, ctx: user.email,
+    "PHONE": lambda user, ctx: user.phone_number,
+    "INDIVIDUAL_SALES": lambda user, ctx: "$%0.2f" % (ctx["leaderboard"].get(access_property["FIRSTNAME"](user, ctx).lower() + "_" + access_property["LASTNAME"](user, ctx).lower(), 0))
 }
 
-def render_message(template, user):
-    property_values = {property_name: access_property[property_name](user) for property_name in access_property}
+def render_message(template, user, ctx):
+    property_values = {property_name: access_property[property_name](user, ctx) for property_name in access_property}
     for property_name in property_values:
         template = template.replace("[" + property_name + "]", property_values[property_name])
     return template
@@ -49,6 +50,9 @@ def generate_template(template_id):
     new_messages_batch = fireClient.batch()
     num_errors = 0
     error_threshold = 0.05
+    ctx = {
+        "leaderboard": fireClient.collection("statistics").document("sales").get().get("leaderboard")
+    }
     for uid in template["recipients"]:
         # If the error rate for message generation exceeds 5%, stop it
         if num_errors / len(template["recipients"]) > error_threshold:
@@ -57,7 +61,7 @@ def generate_template(template_id):
             msg_ref = fireClient.collection("messages").document()
             user = firebase_auth.get_user(uid)
             msg = {
-                "content": render_message(template["template"], user),
+                "content": render_message(template["template"], user, ctx),
                 "sender": random.choice(officer_uids),
                 "recipient": uid,
                 "phone": user.phone_number,
