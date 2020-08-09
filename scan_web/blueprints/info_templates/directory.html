@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>SCAN Directory</title>
+        <link rel="stylesheet" href="{{url_for("static", filename="treant/Treant.css")}}" type="text/css"/>
+        <link rel="stylesheet" href="{{url_for("static", filename="directory.css")}}" type="text/css"/>
+    </head>
+    <body>
+        <h1>SCAN Directory</h1>
+        <div id="directory_container">
+        </div>
+
+        <script src="{{url_for("static", filename="treant/vendor/raphael.js")}}"></script>
+        <script src="{{url_for("static", filename="treant/Treant.js")}}"></script>
+        <script>
+            var directory_chart_config = {
+                chart: {
+                    container: "#directory_container",
+                    connectors: {
+                        type: "step"
+                    }
+                },
+                nodeStructure: {
+                    text: {
+                        name: "Board of Directors"
+                    },
+                    children: [
+                        {% for director, role in directors%}
+                            {
+                                text: {
+                                    name: "{{director.display_name}}",
+                                    title: "{{director_title_names[role]}}"
+                                },
+                                link: {
+                                    href: "{{url_for("auth.view_profile", uid=director.uid)}}"
+                                }
+                            }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                }
+            }
+
+            var directory_chart = new Treant(directory_chart_config);
+        </script>
+    </body>
+</html>
