@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>User ID Lookup</title>
+    </head>
+    <body>
+        <h1>User ID Lookup</h1>
+        <form action="{{url_for("info.user_lookup")}}" method="POST">
+            <label for="data">Phone Number: </label>
+            <input type="text" name="data" placeholder="Enter a phone number"></input>
+            <input type="hidden" name="method" value="phone"></input>
+            <br>
+            <br>
+            <input type="submit" value="Lookup by Phone"></input>
+        </form>
+        <br>
+        <form action="{{url_for("info.user_lookup")}}" method="POST">
+            <label for="data">Email Address: </label>
+            <input type="text" name="data" placeholder="Enter an email address"></input>
+            <input type="hidden" name="method" value="email"></input>
+            <br>
+            <br>
+            <input type="submit" value="Lookup by Email"></input>
+        </form>
+    </body>
+</html>
