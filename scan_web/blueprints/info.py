@@ -8,7 +8,7 @@ info = Blueprint("info", __name__, template_folder="info_templates")
 director_titles = {
     "chairman": "Chairman of the Board",
     "vice_chairman": "Vice Chairman of the Board",
-    "informatics": "Director of Informatics",
+    "finance": "Director of Finance",
     "publicity": "Director of Publicity",
     "operations": "Director of Operations",
     "communications": "Director of Communications",
@@ -18,7 +18,7 @@ officer_titles = {
     "communications": "Communications Officer",
     "publicity": "Publicity Officer",
     "executive": "Executive Officer",
-    "informatics": "Informatics Officer",
+    "finance": "Financial Officer",
     "operations": "Operations Officer"
 }
 
@@ -27,7 +27,7 @@ director_roles = [
     "publicity",
     "chairman",
     "vice_chairman",
-    "informatics",
+    "finance",
     "operations"
 ]
 
@@ -35,7 +35,7 @@ officer_roles = [
     "communications",
     "publicity",
     "executive",
-    "informatics",
+    "finance",
     "operations"
 ]
 
@@ -120,7 +120,6 @@ def view_chapter(chapter_id):
     if not chapter_obj.exists:
         abort(404, "Chapter not found")
     officers = [(firebase_auth.get_user(chapter_obj.get("officers")[role]), role) for role in officer_roles]
-    print(officers)
     
     return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id, officers=officers, officer_titles=officer_titles)
 
