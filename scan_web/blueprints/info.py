@@ -125,7 +125,7 @@ def view_chapter(chapter_id):
     return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id, officers=officers, officer_titles=officer_titles)
 
 
-@info.route("userlookup", methods=["GET", "POST"])
+@info.route("/userlookup", methods=["GET", "POST"])
 def user_lookup():
     if request.method == "GET":
         return render_template("user_lookup.html")
