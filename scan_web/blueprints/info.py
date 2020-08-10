@@ -114,7 +114,8 @@ def view_chapter(chapter_id):
     chapter_obj = chapter_ref.get()
     if not chapter_obj.exists:
         abort(404, "Chapter not found")
-    officers = [(chapter_obj.get("officers")[role], role) for role in officer_roles]
+    officers = [(firebase_auth.get_user(chapter_obj.get("officers")[role]), role) for role in officer_roles]
+    print(officers)
     
     return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id, officers=officers, officer_titles=officer_titles)
 

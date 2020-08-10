@@ -8,6 +8,8 @@
         <h1>SCAN {{chapter.name}} Branch Directory</h1>
         <div id="directory_container">
         </div>
+        <br>
+        <a href="{{url_for("info.display_directory")}}">Back to main directory</a>
 
         <script src="{{url_for("static", filename="treant/vendor/raphael.js")}}"></script>
         <script src="{{url_for("static", filename="treant/Treant.js")}}"></script>
