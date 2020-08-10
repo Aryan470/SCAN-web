@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>SCAN {{chapter.name}} Branch Directory</title>
-        <link rel="stylesheet" href="{{url_for("static", filename="treant/Treant.css")}}" type="text/css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" integrity="sha512-ySoXPqkgXC7K7IS5vOdi47uEpct2yJ3MkYVVVHiM7FOmdDnBUVSmB/D1ps2Pf6jBJnBMyh1EPJLpWh2uCzOLdg==" crossorigin="anonymous" />
         <link rel="stylesheet" href="{{url_for("static", filename="directory.css")}}" type="text/css"/>
     </head>
     <body>
@@ -11,8 +11,8 @@
         <br>
         <a href="{{url_for("info.display_directory")}}">Back to main directory</a>
 
-        <script src="{{url_for("static", filename="treant/vendor/raphael.js")}}"></script>
-        <script src="{{url_for("static", filename="treant/Treant.js")}}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.1/raphael-min.js" integrity="sha512-OgnkEZsEQs8gIrCsLwV/WprYqIUaJ4bymAgcfs2nDK7variw7M+4hJPM2fyK8EQYGh/zL9Bau/HiXVGPS7khnw==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js" integrity="sha512-ADpWKsaOuAegRSoUObE1si2VF6HQJyQR3Zy44l7s6YsGA6BnPIrIwN9uKJ0rsMhtDAMFqnGZhQXMJcsWSp40pA==" crossorigin="anonymous"></script>
         <script>
             var directory_chart_config = {
                 chart: {
