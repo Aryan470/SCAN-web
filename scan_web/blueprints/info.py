@@ -14,7 +14,7 @@ director_titles = {
     "communications": "Director of Communications",
 }
 
-officer_titles: {
+officer_titles = {
     "communications": "Communications Officer",
     "publicity": "Publicity Officer",
     "executive": "Executive Officer",
@@ -78,17 +78,18 @@ def add_chapter():
         abort(404, "Officer UIDs not found")
     chapters_info_obj = fireClient.collection("info").document("chapter_info").get()
     chapter_id = chapters_info_obj.get("id_counter")
+    chapter_id = str(chapter_id)
+    while len(chapter_id) < 3:
+        chapter_id = "0" + chapter_id
+    
     chapter_dict = chapters_info_obj.get("chapters")
     chapter_dict[request.json["name"]] = chapter_id
     fireClient.collection("info").document("chapter_info").set(
         {
-            "id_counter": chapter_id + 1,
+            "id_counter": int(chapter_id) + 1,
             "chapters": chapter_dict
         }
     )
-    chapter_id = str(chapter_id)
-    while len(chapter_id) < 3:
-        chapter_id = "0" + chapter_id
 
     chapter_ref = fireClient.collection("info").document("chapter_info").collection("chapters").document(chapter_id)
 
@@ -113,6 +114,7 @@ def view_chapter(chapter_id):
     chapter_obj = chapter_ref.get()
     if not chapter_obj.exists:
         abort(404, "Chapter not found")
+    officers = [(chapter_obj.get("officers")[role], role) for role in officer_roles]
     
-    return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id)
+    return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id, officers=officers, officer_titles=officer_titles)
 
