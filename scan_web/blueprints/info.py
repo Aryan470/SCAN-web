@@ -51,7 +51,7 @@ def is_verified(uid):
 
 @info.route("/")
 def index():
-    return {"success": True}
+    return redirect(url_for("info.display_directory"))
 
 @info.route("/directory")
 def display_directory():
