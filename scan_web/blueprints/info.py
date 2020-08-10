@@ -71,12 +71,19 @@ def add_chapter():
         return render_template("create_chapter.html")
     if not request.json or "name" not in request.json or "officers" not in request.json or any(role not in request.json["officers"] for role in officer_roles):
         abort(400, "Malformed chapter creation request")
+    try:
+        for role in officer_roles:
+            firebase_auth.get_user(request.json["officers"][role])
+    except:
+        abort(404, "Officer UIDs not found")
     chapters_info_obj = fireClient.collection("info").document("chapter_info").get()
     chapter_id = chapters_info_obj.get("id_counter")
+    chapter_dict = chapters_info_obj.get("chapters")
+    chapter_dict[request.json["name"]] = chapter_id
     fireClient.collection("info").document("chapter_info").set(
         {
             "id_counter": chapter_id + 1,
-            "chapters": chapters_info_obj.get("chapters") + [(request.json["name"], chapter_id)]
+            "chapters": chapter_dict
         }
     )
     chapter_id = str(chapter_id)
@@ -86,7 +93,7 @@ def add_chapter():
     chapter_ref = fireClient.collection("info").document("chapter_info").collection("chapters").document(chapter_id)
 
     try:
-        officers = request.json["officer_uids"]
+        officers = request.json["officers"]
         chapter = {
             "name": request.json["name"],
             "officers": {
