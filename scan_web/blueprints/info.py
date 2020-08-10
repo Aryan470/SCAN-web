@@ -39,6 +39,11 @@ officer_roles = [
     "operations"
 ]
 
+user_lookup_methods = {
+    "phone": lambda d: firebase_auth.get_user_by_phone_number(d if "+" in d else "+1" + d),
+    "email": firebase_auth.get_user_by_email
+}
+
 def is_verified(uid):
     try:
         firebase_auth.get_user(uid)
@@ -119,3 +124,20 @@ def view_chapter(chapter_id):
     
     return render_template("chapter_directory.html", chapter=chapter_obj.to_dict(), chapter_id=chapter_id, officers=officers, officer_titles=officer_titles)
 
+
+@info.route("userlookup", methods=["GET", "POST"])
+def user_lookup():
+    if request.method == "GET":
+        return render_template("user_lookup.html")
+    if not request.form:
+        abort(400, "No form data attached")
+    method = request.form.get("method", "")
+    if method not in user_lookup_methods:
+        abort(400, "Invalid lookup method")
+    if "data" not in request.form:
+        abort(400, "No lookup information provided")
+    try:
+        user = user_lookup_methods[method](request.form["data"])
+        return redirect(url_for("auth.view_profile", uid=user.uid))
+    except:
+        abort(404, "User not found")
