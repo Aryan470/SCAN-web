@@ -1,21 +1,15 @@
 <html>
     <head>
-        <title>SCAN Directory</title>
+        <title>SCAN {{chapter.name}} Branch Directory</title>
         <link rel="stylesheet" href="{{url_for("static", filename="treant/Treant.css")}}" type="text/css"/>
         <link rel="stylesheet" href="{{url_for("static", filename="directory.css")}}" type="text/css"/>
     </head>
     <body>
-        <h1>SCAN Directory</h1>
+        <h1>SCAN {{chapter.name}} Branch Directory</h1>
         <div id="directory_container">
         </div>
-        <h2>Branch Directories</h2>
-        <ul>
-            {% for chapter_name, id in chapters %}
-                <li>
-                    <h4><a href="{{url_for("info.view_chapter", chapter_id=id)}}">{{chapter_name}}</a></h4>
-                </li>
-            {% endfor %}
-        </ul>
+        <br>
+        <a href="{{url_for("info.display_directory")}}">Back to main directory</a>
 
         <script src="{{url_for("static", filename="treant/vendor/raphael.js")}}"></script>
         <script src="{{url_for("static", filename="treant/Treant.js")}}"></script>
@@ -29,17 +23,17 @@
                 },
                 nodeStructure: {
                     text: {
-                        name: "Board of Directors"
+                        name: "{{chapter.name}} Branch"
                     },
                     children: [
-                        {% for director, role in directors%}
+                        {% for officer, role in officers %}
                             {
                                 text: {
-                                    name: "{{director.display_name}}",
-                                    title: "{{director_names[role]}}"
+                                    name: "{{officer.display_name}}",
+                                    title: "{{officer_titles[role]}}"
                                 },
                                 link: {
-                                    href: "{{url_for("auth.view_profile", uid=director.uid)}}"
+                                    href: "{{url_for("auth.view_profile", uid=officer.uid)}}"
                                 }
                             }{% if not loop.last %},{% endif %}
                         {% endfor %}

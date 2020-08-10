@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Register a SCAN Chapter</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>Register a SCAN Chapter</h1>
+        
+        <script>
+            function sendForm() {
+                data = {
+                    name: document.getElementById("branch_name").value,
+                    officers: {
+                        executive: document.getElementById("executive_officer").value,
+                        informatics: document.getElementById("informatics_officer").value,
+                        operations: document.getElementById("operations_officer").value,
+                        publicity: document.getElementById("publicity_officer").value,
+                        communications: document.getElementById("communications_officer").value,
+                    }
+                }
+                var xhr = new XMLHttpRequest();
+                var url = "{{url_for("info.add_chapter")}}";
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState === XMLHttpRequest.DONE) {
+                        var status = xhr.status;
+                        if (status === 0 || (status >= 200 && status < 400)) {
+                            window.location.href = xhr.responseURL;
+                        } else {
+                            alert("An error occurred with the chapter creation:\n" + xhr.responseText)
+                        }
+                    }
+                    };
+
+                xhr.send(JSON.stringify(data));
+            }
+        </script>
+
+
+            <table>
+                <tr>
+                    <td><label for="branch_name">Branch Name</label></td>
+                    <td><input type="text" name="branch_name" id="branch_name"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="executive_officer">Executive Officer UID</label></td>
+                    <td><input type="text" name="executive_officer" id="executive_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="informatics_officer">Informatics Officer UID</label></td>
+                    <td><input type="text" name="informatics_officer" id="informatics_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="publicity_officer">Publicity Officer UID</label></td>
+                    <td><input type="text" name="publicity_officer" id="publicity_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="operations_officer">Operations Officer UID</label></td>
+                    <td><input type="text" name="operations_officer" id="operations_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="communications_officer">Communications Officer UID</label></td>
+                    <td><input type="text" name="communications_officer" id="communications_officer"></input></td>
+                </tr>
+            </table>
+            <br>
+            
+            <button onclick="sendForm()">Submit</button>
+
+    </body>
+</html>
