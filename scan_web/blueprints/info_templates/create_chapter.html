@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Register a SCAN Chapter</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>Register a SCAN Chapter</h1>
+        
+        <script>
+            function sendForm() {
+
+            }
+        </script>
+
+        <form onsubmit="sendForm()">
+            <table>
+                <tr>
+                    <td><label for="branch_name">Branch Name</label></td>
+                    <td><input type="text" name="branch_name"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="executive_officer">Executive Officer UID</label></td>
+                    <td><input type="text" name="executive_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="informatics_officer">Informatics Officer UID</label></td>
+                    <td><input type="text" name="informatics_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="publicity_officer">Publicity Officer UID</label></td>
+                    <td><input type="text" name="publicity_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="operations_officer">Operations Officer UID</label></td>
+                    <td><input type="text" name="operations_officer"></input></td>
+                </tr>
+
+                <tr>
+                    <td><label for="communications_officer">Communications Officer UID</label></td>
+                    <td><input type="text" name="communications_officer"></input></td>
+                </tr>
+            </table>
+            <br>
+            
+            <input type="submit"></input>
+        </form>
+    </body>
+</html>

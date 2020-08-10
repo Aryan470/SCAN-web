@@ -33,11 +33,9 @@ def login():
     else:
         session["name"] = "Click to setup profile"
 
-    print(request.json)
     if "redirect" in request.json:
-        return redirect(url_for(request.json["redirect"]))
+        return redirect(request.json["redirect"])
     else:
-        print("NO REDIRECT")
         return redirect(url_for("bakesale.index"))
 
 @auth.route("/logout", methods=["GET"])

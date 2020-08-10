@@ -17,7 +17,7 @@ def index():
 @sms.route("/messages")
 def view_messages():
     if "uid" not in session:
-        return redirect(url_for("auth.login", redirect="sms.view_messages"))
+        return redirect(url_for("auth.login", redirect=url_for("sms.view_messages")))
     
     my_messages = {message.id: message.to_dict() for message in fireClient.collection("messages").where("sender", "==", session["uid"]).where("sent", "==", False).stream()}
     return render_template("messages.html", messages=my_messages)
@@ -83,7 +83,7 @@ def generate_template(template_id):
 @sms.route("/createtemplate", methods=["GET", "POST"])
 def create_template():
     if "uid" not in session:
-        return redirect(url_for("auth.login", redirect="sms.create_message"))
+        return redirect(url_for("auth.login", redirect=url_for("sms.create_message")))
     user_obj = fireClient.collection("users").document(session["uid"]).get()
     if not user_obj.exists or user_obj.to_dict().get("tier", "") != "officer":
         abort(401)

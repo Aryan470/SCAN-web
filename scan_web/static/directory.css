@@ -1,3 +1,4 @@
 .node {
-    border-style: solid
+    border-style: solid;
+    border-width: 1px;
 }
