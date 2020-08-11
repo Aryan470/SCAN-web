@@ -4,7 +4,7 @@
     </head>
 
     <body>
-        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Delivery View)</h1>
         <h2>Order Info</h2>
         <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}}</span></p>
@@ -12,7 +12,7 @@
         {% if order.delivery is defined %}
             <p><b>Delivery Information:</b></p>
             <ul>
-                <li>Delivered by: <a href="{{url_for("auth.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></li>
+                <li>Delivered by: <a href="{{url_for("info.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></li>
                 <li>Delivered at: <span class="datetime">{{order.delivery.UTC_timestamp}}</span<</li>
             </ul>
             <br>
@@ -34,7 +34,7 @@
                     <ul>
                         {% for baker in order.fulfillment[category][item].bakers %}
                             <li>
-                                <a href="{{url_for("auth.view_profile", uid=baker)}}">{{order.fulfillment[category][item].bakers[baker].name}}</a>: {{order.fulfillment[category][item].bakers[baker].count}}
+                                <a href="{{url_for("info.view_profile", uid=baker)}}">{{order.fulfillment[category][item].bakers[baker].name}}</a>: {{order.fulfillment[category][item].bakers[baker].count}}
                             </li>
                         {% endfor %}
                     </ul>

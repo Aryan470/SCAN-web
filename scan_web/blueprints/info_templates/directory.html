@@ -39,7 +39,7 @@
                                     title: "{{director_names[role]}}"
                                 },
                                 link: {
-                                    href: "{{url_for("auth.view_profile", uid=director.uid)}}"
+                                    href: "{{url_for("info.view_profile", uid=director.uid)}}"
                                 }
                             }{% if not loop.last %},{% endif %}
                         {% endfor %}

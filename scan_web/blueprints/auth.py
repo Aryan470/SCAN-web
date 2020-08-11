@@ -62,7 +62,7 @@ def create_user():
     except:
         abort(400, "Malformed form data")
     if not new_user["phone"]:
-        new_user.pop("pheon")
+        new_user.pop("phone")
     elif "+" not in new_user["phone"]:
         new_user["phone"] = "+1" + new_user["phone"]
     
@@ -77,40 +77,3 @@ def create_user():
     except BaseException as e:
         abort(400, "User could not be created: %s" % str(e))
     return {"success": True}
-
-@auth.route("/editprofile", methods=["GET", "POST"])
-def edit_profile():
-    if "uid" not in session:
-        return redirect(url_for("auth.login"))
-    
-    uid = session["uid"]
-    user = firebase_auth.get_user(session["uid"])
-    if request.method == "GET":
-        return render_template("edit_profile.html", user=user)
-    
-    try:
-        if session["uid"] != request.form["uid"]:
-            abort(400, "UID does not match session")
-        phone = ''.join(c for c in request.form["phone"] if c.isdigit() or c == '+')
-        if "+" not in phone:
-            phone = "+1" + phone
-        firebase_auth.update_user(
-            uid=session["uid"],
-            display_name=request.form["name"],
-            email=request.form["email"],
-            phone_number=phone
-        )
-    except Exception as e:
-        abort(400, "Malformed edit profile request: " + str(e))
-        
-    return redirect(url_for("auth.view_profile", uid=session["uid"]))
-
-
-@auth.route("/profile/<uid>", methods=["GET"])
-def view_profile(uid):
-    try:
-        user = firebase_auth.get_user(uid)
-    except:
-        abort(404, "User not found")
-
-    return render_template("view_profile.html", user=user)

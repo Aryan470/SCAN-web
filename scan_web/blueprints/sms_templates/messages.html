@@ -3,7 +3,7 @@
         <title>SCAN SMS View</title>
     </head>
     <body>
-        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS View</h1>
         <h2>Your Messages to Send:</h2>
         <form action="{{url_for("sms.mark_sent")}}" method="POST">

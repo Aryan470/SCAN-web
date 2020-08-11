@@ -3,9 +3,9 @@
         <title>SCAN Profile</title>
     </head>
     <body>
-        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Profile Editor</h1>
-        <form action="{{url_for("auth.edit_profile")}}" method="POST">
+        <form action="{{url_for("info.edit_profile")}}" method="POST">
             <label for="name"><b>Name</b></label>
             <input type="text" name="name" id="name" value="{{user.display_name}}" placeholder="Enter your name" required></input>
             <br>

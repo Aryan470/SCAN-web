@@ -11,14 +11,14 @@
                 document.getElementById("generate_form").appendChild(waitMessage);
             }
         </script>
-        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("auth.edit_profile")}}">{{session["name"]}}</a></p>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN SMS Template View</h1>
 
         <h3>Timestamp</h3>
         <p class="datetime">{{template.UTC_timestamp}}</p>
 
         <h3>Author</h3>
-        <a href="{{url_for("auth.view_profile", uid=template.author.uid)}}">{{template.author.name}}</a>
+        <a href="{{url_for("info.view_profile", uid=template.author.uid)}}">{{template.author.name}}</a>
 
         <h3>Status</h3>
         <p>{{template.recipients.values()|sum()}} out of {{template.get("recipients")|length}} sent ({{"%0.2f%%" % (100 * template.recipients.values()|sum() / template.get("recipients")|length)}})</p>
