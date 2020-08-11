@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>User Lookup</title>
+    </head>
+    <body>
+        <h1>User Lookup Results</h1>
+        {% if not results %}
+            <h3>No Results</h3>
+        {% endif %}
+        <table border=1>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    UID
+                </th>
+                <th>
+                    Link
+                </th>
+            </tr>
+                {% for user in results %}
+                <tr>
+                    <td>
+                        {{user.display_name}}
+                    </td>
+                    <td>
+                        {{user.email}}
+                    </td>
+                    <td>
+                        {{user.phone_number}}
+                    </td>
+                    <td>
+                        {{user.uid}}
+                    </td>
+                    <td>
+                        <a href="{{url_for("info.view_profile", uid=user.uid)}}">Click Me</a>
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+        <br>
+
+        <a href="{{url_for("info.user_lookup")}}">Search again</a>
+    </body>
+</html>

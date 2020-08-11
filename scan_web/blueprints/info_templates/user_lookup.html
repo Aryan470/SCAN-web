@@ -21,5 +21,14 @@
             <br>
             <input type="submit" value="Lookup by Email"></input>
         </form>
+        <br>
+        <form action="{{url_for("info.user_lookup")}}" method="POST">
+            <label for="data">Name: </label>
+            <input type="text" name="data" placeholder="Enter a name"></input>
+            <input type="hidden" name="method" value="name"></input>
+            <br>
+            <br>
+            <input type="submit" value="Lookup by Name"></input>
+        </form>
     </body>
 </html>

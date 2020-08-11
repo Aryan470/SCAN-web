@@ -40,8 +40,9 @@ officer_roles = [
 ]
 
 user_lookup_methods = {
-    "phone": lambda d: firebase_auth.get_user_by_phone_number(d if "+" in d else "+1" + d),
-    "email": firebase_auth.get_user_by_email
+    "phone": lambda phone: [firebase_auth.get_user_by_phone_number(phone if "+" in phone else "+1" + phone)],
+    "email": lambda email: [firebase_auth.get_user_by_email(email)],
+    "name": lambda name: [firebase_auth.get_user(user.id) for user in fireClient.collection("users").where("name_array", "array_contains_any", name.lower().split()).stream()]
 }
 
 def is_verified(uid):
@@ -136,8 +137,8 @@ def user_lookup():
     if "data" not in request.form:
         abort(400, "No lookup information provided")
     try:
-        user = user_lookup_methods[method](request.form["data"])
-        return redirect(url_for("info.view_profile", uid=user.uid))
+        results = user_lookup_methods[method](request.form["data"])
+        return render_template("user_lookup_results.html", results=results)
     except:
         abort(404, "User not found")
 
