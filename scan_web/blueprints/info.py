@@ -158,6 +158,11 @@ def edit_profile():
         phone = ''.join(c for c in request.form["phone"] if c.isdigit() or c == '+')
         if "+" not in phone:
             phone = "+1" + phone
+        if user.display_name and request.form["name"] != user.display_name:
+            user_ref = fireClient.collection("users").document(user.uid)
+            user_dict = user_ref.get().to_dict()
+            user_dict["name_array"] = request.form["name"].lower().split()
+            user_ref.set(user_dict)
         firebase_auth.update_user(
             uid=session["uid"],
             display_name=request.form["name"],
