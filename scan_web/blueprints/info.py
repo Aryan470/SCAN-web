@@ -137,6 +137,44 @@ def user_lookup():
         abort(400, "No lookup information provided")
     try:
         user = user_lookup_methods[method](request.form["data"])
-        return redirect(url_for("auth.view_profile", uid=user.uid))
+        return redirect(url_for("info.view_profile", uid=user.uid))
     except:
         abort(404, "User not found")
+
+
+@info.route("/editprofile", methods=["GET", "POST"])
+def edit_profile():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    uid = session["uid"]
+    user = firebase_auth.get_user(session["uid"])
+    if request.method == "GET":
+        return render_template("edit_profile.html", user=user)
+    
+    try:
+        if session["uid"] != request.form["uid"]:
+            abort(400, "UID does not match session")
+        phone = ''.join(c for c in request.form["phone"] if c.isdigit() or c == '+')
+        if "+" not in phone:
+            phone = "+1" + phone
+        firebase_auth.update_user(
+            uid=session["uid"],
+            display_name=request.form["name"],
+            email=request.form["email"],
+            phone_number=phone
+        )
+    except Exception as e:
+        abort(400, "Malformed edit profile request: " + str(e))
+        
+    return redirect(url_for("info.view_profile", uid=session["uid"]))
+
+
+@info.route("/user/<uid>", methods=["GET"])
+def view_profile(uid):
+    try:
+        user = firebase_auth.get_user(uid)
+    except:
+        abort(404, "User not found")
+
+    return render_template("view_profile.html", user=user)
