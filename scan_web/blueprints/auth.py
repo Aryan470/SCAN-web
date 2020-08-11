@@ -74,6 +74,12 @@ def create_user():
             password="members not allowed",
             display_name=str("%s %s" % (new_user["first_name"], new_user["last_name"]))
         )
+
+        user_ref = fireClient.collection("users").document(firebase_user.uid)
+        user_ref.set({
+                "name_array": firebase_user.display_name.lower().split(),
+                "tier": "member"
+        })
     except BaseException as e:
         abort(400, "User could not be created: %s" % str(e))
     return {"success": True}
