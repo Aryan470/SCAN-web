@@ -110,8 +110,15 @@ def add_chapter():
         }
     except KeyError:
         abort(400, "Malformed chapter creation request")
+    batch_write = fireClient.batch()
+    batch_write.set(chapter_ref, chapter)
+    for uid in officers.values():
+        user_ref = fireClient.collection("users").document(uid)
+        old_user = user_ref.get().to_dict()
+        old_user["tier"] = "officer"
+        batch_write.set(fireClient.collection("users").document(uid), old_user)
 
-    chapter_ref.set(chapter)
+    batch_write.commit()
     return redirect(url_for("info.view_chapter", chapter_id=chapter_id))
 
 @info.route("/viewchapter/<chapter_id>")
