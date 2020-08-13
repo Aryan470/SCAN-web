@@ -7,8 +7,8 @@ from datetime import datetime
 
 sms = Blueprint("sms", __name__, template_folder="sms_templates")
 
-ambassador_uids = [officer.to_dict()["uid"] for officer in fireClient.collection("users").where("tier", "==", "ambassador").stream()]
-officer_uids = [officer.to_dict()["uid"] for officer in fireClient.collection("users").where("tier", "==", "officer").stream()]
+ambassador_uids = [ambassador.id for ambassador in fireClient.collection("users").where("tier", "==", "ambassador").stream()]
+officer_uids = [officer.id for officer in fireClient.collection("users").where("tier", "==", "officer").stream()]
 
 @sms.route("/")
 def index():
