@@ -8,6 +8,18 @@ from uuid import uuid4
 
 auth = Blueprint("auth", __name__, template_folder="auth_templates")
 
+def serialize_userrecord(record: firebase_auth.UserRecord):
+    return {
+        "uid": record.uid,
+        "photo_url": record.photo_url,
+        "phone_number": record.phone_number,
+        "email_verified": record.email_verified,
+        "email": record.email,
+        "display_name": record.display_name,
+        "disabled": record.disabled,
+        "custom_claims": record.custom_claims,
+    }
+
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -28,6 +40,9 @@ def login():
     
     session["uid"] = uid
     user_info = firebase_auth.get_user(uid)
+    session["user"] = serialize_userrecord(user_info)
+
+    print(session)
     if user_info.display_name:
         session["name"] = user_info.display_name
     else:
