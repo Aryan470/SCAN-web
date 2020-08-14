@@ -22,7 +22,6 @@ def create_app():
         app.secret_key = "DEVELOPMENT"
 
     if os.environ["CONTEXT"] == "PROD":
-        app.register_blueprint(bakesale.bakesale, subdomain="bakesale")
         app.register_blueprint(auth.auth, subdomain="auth")
         app.register_blueprint(sms.sms, subdomain="sms")
         app.register_blueprint(info.info, subdomain="info")
