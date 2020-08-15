@@ -108,11 +108,13 @@ def report_issue():
 
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
+    return render_template("form_closed.html")
+    
     if "referral" in request.args:
         return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"))
     return render_template("orderform.html", product_data=product_data, number_names=number_names)
 
-@bakesale.route("/submit_order", methods=["POST"])
+#@bakesale.route("/submit_order", methods=["POST"])
 def submit_order():
     userInfo = {}
     for userVar in userVars:
