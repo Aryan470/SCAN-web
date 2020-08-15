@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session
+from flask import Blueprint, request, abort, jsonify, render_template, redirect, url_for, session, send_file
 import firebase_admin.auth as firebase_auth
 import firebase_admin.firestore as firestore
 from scan_web import fireClient
@@ -68,6 +68,10 @@ def display_directory():
     chapters = sorted(chapters_dict.items(), key=lambda entry: entry[1])
 
     return render_template("directory.html", directors=directors, director_names=director_titles, chapters=chapters)
+
+@info.route("/SCAN_contacts")
+def download_vcf():
+    return send_file("static/SCAN_contacts.vcf", as_attachment=True, attachment_filename="SCAN_contacts.vcf")
 
 @info.route("/addchapter", methods=["GET", "POST"])
 def add_chapter():

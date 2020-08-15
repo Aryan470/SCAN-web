@@ -1,0 +1,28 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Aryan Khatri
+N:Khatri;Aryan;;;
+item1.EMAIL;TYPE=INTERNET:aryan@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:(469) 515-5956
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Vice Chairman
+item4.X-ABLabel:
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Harshini ThangaRajMalini
+N:ThangaRajMalini;Harshini;;;
+item1.EMAIL;TYPE=INTERNET:harshini@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:(469) 515-5956
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Chairman
+item4.X-ABLabel:
+CATEGORIES:SCAN,myContacts
+END:VCARD
