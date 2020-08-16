@@ -1,28 +1,336 @@
 BEGIN:VCARD
 VERSION:3.0
-FN:Aryan Khatri
+FN:Kousik Pranav
+N:Kousik;Pranav;;;
+item1.EMAIL;TYPE=INTERNET:pranav@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:+14257868253
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Director of Operations
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/W7SIhwzfM8QJui6oY8RkP6DPovE3
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Khatri Aryan
 N:Khatri;Aryan;;;
 item1.EMAIL;TYPE=INTERNET:aryan@sicklecellawareness.net
 item1.X-ABLabel:
-item2.TEL:(469) 515-5956
+item2.TEL:+14695155956
 item2.X-ABLabel:
 item3.ORG:SCAN;Directorate
 item3.X-ABLabel:
 item4.TITLE:Vice Chairman
 item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/lvWXZdOLvFOZVo8xiO1hKo1P1tu1
+item5.X-ABLabel:PROFILE
 CATEGORIES:SCAN,myContacts
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
-FN:Harshini ThangaRajMalini
-N:ThangaRajMalini;Harshini;;;
+FN:Vattikuti Alekhya
+N:Vattikuti;Alekhya;;;
+item1.EMAIL;TYPE=INTERNET:alekhya@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:+14697157868
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Director of Publicity
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/XzMlsYLq3TerU1G1aympKR5E9UD3
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Thangarajmalini Harshini
+N:Thangarajmalini;Harshini;;;
 item1.EMAIL;TYPE=INTERNET:harshini@sicklecellawareness.net
 item1.X-ABLabel:
-item2.TEL:(469) 515-5956
+item2.TEL:+19725363470
 item2.X-ABLabel:
 item3.ORG:SCAN;Directorate
 item3.X-ABLabel:
 item4.TITLE:Chairman
 item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/v0KSuV6w8uX5iubSSatcf6UHxnm1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Pari Kavin
+N:Pari;Kavin;;;
+item1.EMAIL;TYPE=INTERNET:kavin@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:+14698633223
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Director of Finance
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/iNonco9oWLb7ae4T176LXkBGe5r2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Prabakaran Krisha
+N:Prabakaran;Krisha;;;
+item1.EMAIL;TYPE=INTERNET:krisha@sicklecellawareness.net
+item1.X-ABLabel:
+item2.TEL:+14696319601
+item2.X-ABLabel:
+item3.ORG:SCAN;Directorate
+item3.X-ABLabel:
+item4.TITLE:Director of Communications
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/QDZU4dOF11gEcOckYvuNXpODB503
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Kolluri Santosh
+N:Kolluri;Santosh;;;
+item1.EMAIL;TYPE=INTERNET:santosh.kolluri.154@k12.friscoisd.org
+item1.X-ABLabel:
+item2.TEL:+12145344680
+item2.X-ABLabel:
+item3.ORG:SCAN;Frisco
+item3.X-ABLabel:
+item4.TITLE:Financial Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/Z73QIUIXY6STKvHNkh3cjZipI9q2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Koundinya Riya
+N:Koundinya;Riya;;;
+item1.EMAIL;TYPE=INTERNET:riyakoundinya@gmail.com
+item1.X-ABLabel:
+item2.TEL:+14692124865
+item2.X-ABLabel:
+item3.ORG:SCAN;Frisco
+item3.X-ABLabel:
+item4.TITLE:Communications Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/pJLmqr79h2bLYcogeNZdGT8LcLx2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Pari Kaavya
+N:Pari;Kaavya;;;
+item1.EMAIL;TYPE=INTERNET:kaavyapari@gmail.com
+item1.X-ABLabel:
+item2.TEL:+19728548087
+item2.X-ABLabel:
+item3.ORG:SCAN;Frisco
+item3.X-ABLabel:
+item4.TITLE:Operations Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/klH6sUATe9YhS9SnEBE6yKr5lcH3
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Sunkireddy Avani
+N:Sunkireddy;Avani;;;
+item1.EMAIL;TYPE=INTERNET:avani.sunkireddy@gmail.com
+item1.X-ABLabel:
+item2.TEL:+14695344420
+item2.X-ABLabel:
+item3.ORG:SCAN;Frisco
+item3.X-ABLabel:
+item4.TITLE:Publicity Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/6UA7bP0ZBPeHspF5KIcS0nhgcSx1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Sheikh Mohammad
+N:Sheikh;Mohammad;;;
+item1.EMAIL;TYPE=INTERNET:umarsheikh4804@gmail.com
+item1.X-ABLabel:
+item2.TEL:+14694007136
+item2.X-ABLabel:
+item3.ORG:SCAN;Frisco
+item3.X-ABLabel:
+item4.TITLE:Executive Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/U58g6iKRNyMJxrEhEvpco3Wu3pm2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Salman Syeda
+N:Salman;Syeda;;;
+item1.EMAIL;TYPE=INTERNET:syeda.salman.670@k12.friscoisd.org
+item1.X-ABLabel:
+item2.TEL:+19254003088
+item2.X-ABLabel:
+item3.ORG:SCAN;Carrollton
+item3.X-ABLabel:
+item4.TITLE:Operations Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/IECJzcv3ACXhPz1UamGklrC4s3z1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Logue Kayle
+N:Logue;Kayle;;;
+item1.EMAIL;TYPE=INTERNET:kayle.lg726@gmail.co
+item1.X-ABLabel:
+item2.TEL:+12145868762
+item2.X-ABLabel:
+item3.ORG:SCAN;Carrollton
+item3.X-ABLabel:
+item4.TITLE:Publicity Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/s035FqieGeQwQUqipuiTW0YSoJ52
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Alam Khizraa
+N:Alam;Khizraa;;;
+item1.EMAIL;TYPE=INTERNET:khizraa.alam930@cfbmail.com
+item1.X-ABLabel:
+item2.TEL:+14692033543
+item2.X-ABLabel:
+item3.ORG:SCAN;Carrollton
+item3.X-ABLabel:
+item4.TITLE:Executive Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/cfevmJL8wAYFx2Qh4RVPLHengxa2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Reyna Alexis
+N:Reyna;Alexis;;;
+item1.EMAIL;TYPE=INTERNET:alarege1rey@gmail.com
+item1.X-ABLabel:
+item2.TEL:+14694726612
+item2.X-ABLabel:
+item3.ORG:SCAN;Carrollton
+item3.X-ABLabel:
+item4.TITLE:Financial Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/hnO8ZIqYGqdUC5revbLMSLMVlM12
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Narsian Yash
+N:Narsian;Yash;;;
+item1.EMAIL;TYPE=INTERNET:ynarsian@yahoo.com
+item1.X-ABLabel:
+item2.TEL:+18182913008
+item2.X-ABLabel:
+item3.ORG:SCAN;Carrollton
+item3.X-ABLabel:
+item4.TITLE:Communications Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/sONTx1b0I7QKHFSuiSuR3jnojc83
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Swenson Grace
+N:Swenson;Grace;;;
+item1.EMAIL;TYPE=INTERNET:gswenney@gmail.com
+item1.X-ABLabel:
+item2.TEL:+12145856564
+item2.X-ABLabel:
+item3.ORG:SCAN;Allen
+item3.X-ABLabel:
+item4.TITLE:Financial Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/3IDBhUHrQNO8Y3aNDKIZcu5wzTr1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Subbiah Arun
+N:Subbiah;Arun;;;
+item1.EMAIL;TYPE=INTERNET:arunsubiah@gmail.com
+item1.X-ABLabel:
+item2.TEL:+14252198729
+item2.X-ABLabel:
+item3.ORG:SCAN;Allen
+item3.X-ABLabel:
+item4.TITLE:Communications Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/CeNrZm7jcZZmP1xeMfFB6ZVhEdv1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Raval Veer
+N:Raval;Veer;;;
+item1.EMAIL;TYPE=INTERNET:veer.raval23@gmail.com
+item1.X-ABLabel:
+item2.TEL:+19722144877
+item2.X-ABLabel:
+item3.ORG:SCAN;Allen
+item3.X-ABLabel:
+item4.TITLE:Operations Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/lEwyeXPjUqOsj6prTzWcS24kgVb2
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Radhakrishnan Swetha
+N:Radhakrishnan;Swetha;;;
+item1.EMAIL;TYPE=INTERNET:swetha03r@gmail.com
+item1.X-ABLabel:
+item2.TEL:+12145857572
+item2.X-ABLabel:
+item3.ORG:SCAN;Allen
+item3.X-ABLabel:
+item4.TITLE:Publicity Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/7e8tYgOG4cSoOykHPA0yOj8gkVi1
+item5.X-ABLabel:PROFILE
+CATEGORIES:SCAN,myContacts
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:Prakasam Rohan
+N:Prakasam;Rohan;;;
+item1.EMAIL;TYPE=INTERNET:rohanprakasam@yahoo.com
+item1.X-ABLabel:
+item2.TEL:+14695163326
+item2.X-ABLabel:
+item3.ORG:SCAN;Allen
+item3.X-ABLabel:
+item4.TITLE:Executive Officer
+item4.X-ABLabel:
+item5.URL:https\://info.sicklecellawareness.net/user/gh6AiX5XXTUIry9xSnswcE6zXNu1
+item5.X-ABLabel:PROFILE
 CATEGORIES:SCAN,myContacts
 END:VCARD
