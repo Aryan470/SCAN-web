@@ -86,7 +86,7 @@ def create_template():
     if "user" not in session or "uid" not in session["user"]:
         return redirect(url_for("auth.login", redirect=url_for("sms.create_template")))
     user_obj = fireClient.collection("users").document(session["uid"]).get()
-    if not user_obj.exists or user_obj.to_dict().get("tier", "") != "officer":
+    if not user_obj.exists or user_obj.to_dict().get("tier", "") != "director":
         abort(401)
     if request.method == "GET":
         return render_template("create_template.html", available_data=access_property)
