@@ -9,6 +9,7 @@ sms = Blueprint("sms", __name__, template_folder="sms_templates")
 
 ambassador_uids = [ambassador.id for ambassador in fireClient.collection("users").where("tier", "==", "ambassador").stream()]
 officer_uids = [officer.id for officer in fireClient.collection("users").where("tier", "==", "officer").stream()]
+director_uids = [director.id for director in fireClient.collection("users").where("tier", "==", "director").stream()]
 
 @sms.route("/")
 def index():
@@ -82,7 +83,7 @@ def generate_template(template_id):
 
 @sms.route("/createtemplate", methods=["GET", "POST"])
 def create_template():
-    if "uid" not in session:
+    if "user" not in session or "uid" not in session["user"]:
         return redirect(url_for("auth.login", redirect=url_for("sms.create_message")))
     user_obj = fireClient.collection("users").document(session["uid"]).get()
     if not user_obj.exists or user_obj.to_dict().get("tier", "") != "officer":
@@ -92,11 +93,11 @@ def create_template():
     template = {
         "template": request.form["template"],
         "author": {
-            "uid": session["uid"],
-            "name": session["name"]
+            "uid": session["user"]["uid"],
+            "name": session["user"]["display_name"]
         },
         "generated": False,
-        "recipients": {user.uid: False for user in firebase_auth.list_users().iterate_all() if user.uid not in officer_uids and user.uid not in ambassador_uids},
+        "recipients": {user.uid: False for user in firebase_auth.list_users().iterate_all() if user.uid not in director_uids},
         "UTC_timestamp": str(datetime.utcnow())
     }
     template_obj = fireClient.collection("message_templates").document()
