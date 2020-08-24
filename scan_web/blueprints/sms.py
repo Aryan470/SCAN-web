@@ -84,7 +84,7 @@ def generate_template(template_id):
 @sms.route("/createtemplate", methods=["GET", "POST"])
 def create_template():
     if "user" not in session or "uid" not in session["user"]:
-        return redirect(url_for("auth.login", redirect=url_for("sms.create_message")))
+        return redirect(url_for("auth.login", redirect=url_for("sms.create_template")))
     user_obj = fireClient.collection("users").document(session["uid"]).get()
     if not user_obj.exists or user_obj.to_dict().get("tier", "") != "officer":
         abort(401)
