@@ -63,7 +63,7 @@ def generate_template(template_id):
             user = firebase_auth.get_user(uid)
             msg = {
                 "content": render_message(template["template"], user, ctx),
-                "sender": random.choice(officer_uids),
+                "sender": random.choice(director_uids),
                 "recipient": uid,
                 "phone": user.phone_number,
                 "sent": False,
