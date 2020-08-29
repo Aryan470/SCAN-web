@@ -174,22 +174,7 @@ item5.URL:https\://info.sicklecellawareness.net/user/U58g6iKRNyMJxrEhEvpco3Wu3pm
 item5.X-ABLabel:PROFILE
 CATEGORIES:SCAN,myContacts
 END:VCARD
-BEGIN:VCARD
-VERSION:3.0
-FN:Salman Syeda
-N:Salman;Syeda;;;
-item1.EMAIL;TYPE=INTERNET:syeda.salman.670@k12.friscoisd.org
-item1.X-ABLabel:
-item2.TEL:+19254003088
-item2.X-ABLabel:
-item3.ORG:SCAN;Carrollton
-item3.X-ABLabel:
-item4.TITLE:Operations Officer
-item4.X-ABLabel:
-item5.URL:https\://info.sicklecellawareness.net/user/IECJzcv3ACXhPz1UamGklrC4s3z1
-item5.X-ABLabel:PROFILE
-CATEGORIES:SCAN,myContacts
-END:VCARD
+
 BEGIN:VCARD
 VERSION:3.0
 FN:Logue Kayle
