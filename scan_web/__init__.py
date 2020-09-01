@@ -29,9 +29,5 @@ def create_app():
     app.register_blueprint(auth.auth, url_prefix="/auth")
     app.register_blueprint(sms.sms, url_prefix="/sms")
     app.register_blueprint(info.info, url_prefix="/info")
-
-    @app.route("/")
-    def index():
-        return redirect(url_for("bakesale.index"))
     
     return app
