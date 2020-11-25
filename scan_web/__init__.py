@@ -24,6 +24,10 @@ def create_app():
     @app.route("/tutoring")
     def tutoring_sheet_link():
         return redirect("https://docs.google.com/forms/d/e/1FAIpQLScBZWUHSAlzsarJKmxUgpK3Dc82Gt9vHFT3AonDk6Jr3hGx9g/viewform?usp=sf_link")
+    
+    @app.route("/xmas")
+    def goodie_bag_volunteering_link():
+        return redirect("https://docs.google.com/forms/d/e/1FAIpQLSe1izY7BgiuTWL9Pg8TW0kwMR59V85yLm4dYUXqd9xKCPqlqQ/viewform?usp=sf_link")
 
     if os.environ["CONTEXT"] == "PROD":
         app.register_blueprint(auth.auth, subdomain="auth")
