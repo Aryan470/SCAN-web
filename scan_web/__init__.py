@@ -20,22 +20,12 @@ def create_app():
         app.secret_key = os.environ["SECRET_KEY"]
     else:
         app.secret_key = "DEVELOPMENT"
-        
-    @app.route("/tutoring")
-    def tutoring_sheet_link():
-        return redirect("https://docs.google.com/forms/d/e/1FAIpQLScBZWUHSAlzsarJKmxUgpK3Dc82Gt9vHFT3AonDk6Jr3hGx9g/viewform?usp=sf_link")
-    
-    @app.route("/xmas")
-    def goodie_bag_volunteering_link():
-        return redirect("https://docs.google.com/forms/d/e/1FAIpQLSe1izY7BgiuTWL9Pg8TW0kwMR59V85yLm4dYUXqd9xKCPqlqQ/viewform?usp=sf_link")
 
     if os.environ["CONTEXT"] == "PROD":
+        app.register_blueprint(bakesale.bakesale, subdomain="bakesale")
         app.register_blueprint(auth.auth, subdomain="auth")
-        app.register_blueprint(sms.sms, subdomain="sms")
-        app.register_blueprint(info.info, subdomain="info")
-    app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
-    app.register_blueprint(auth.auth, url_prefix="/auth")
-    app.register_blueprint(sms.sms, url_prefix="/sms")
-    app.register_blueprint(info.info, url_prefix="/info")
+    else:
+        app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
+        app.register_blueprint(auth.auth, url_prefix="/auth")
     
     return app
