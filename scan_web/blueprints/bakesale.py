@@ -29,21 +29,9 @@ exec_referral_links = [
     "Pranav_Kousik".lower(),
     "Harshini_ThangaRajMalini".lower(),
     "Krisha_Prabakaran".lower(),
-    "Kavin_Pari".lower(),
-    "Amaya_Sankaran".lower(),
+    "Rupak_Kadiri".lower(),
     "Alekhya_Vattikuti".lower(),
-    "Kaavya_Pari".lower(),
-    "Avani_Sunkireddy".lower(),
-    "Aryan_Khatri".lower(),
-    "PranavKousik".lower(),
-    "HarshiniThangaRajMalini".lower(),
-    "KrishaPrabakaran".lower(),
-    "KavinPari".lower(),
-    "AmayaSankaran".lower(),
-    "AlekhyaVattikuti".lower(),
-    "KaavyaPari".lower(),
-    "AvaniSunkireddy".lower(),
-    "AryanKhatri".lower()
+    "Aryan_Khatri".lower()
 ]
 admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1"]
 
@@ -108,13 +96,11 @@ def report_issue():
 
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
-    return render_template("form_closed.html")
-    
     if "referral" in request.args:
         return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"))
     return render_template("orderform.html", product_data=product_data, number_names=number_names)
 
-#@bakesale.route("/submit_order", methods=["POST"])
+@bakesale.route("/submit_order", methods=["POST"])
 def submit_order():
     userInfo = {}
     for userVar in userVars:
@@ -425,28 +411,30 @@ def view_profile(uid):
     return render_template("view_profile.html", user=user_dict, rolenames=role_names)
 
 def send_mail(recipient, subject, plain_content, html_content=None):
-    if os.environ["CONTEXT"] == "PROD":
-        port = 465
-        smtp_server = "smtp.gmail.com"
+    if os.environ["CONTEXT"] != "PROD":
+        return
+    
+    port = 465
+    smtp_server = "smtp.gmail.com"
 
-        sender_email = os.environ["EMAIL"]
-        password = os.environ["EMAIL_PASS"]
-        alias_email = os.environ["ALIAS_EMAIL"]
+    sender_email = os.environ["EMAIL"]
+    password = os.environ["EMAIL_PASS"]
+    alias_email = os.environ["ALIAS_EMAIL"]
 
-        message = MIMEMultipart("alternative")
-        message["Subject"] = subject
-        message["From"] = alias_email
-        message["To"] = recipient
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = alias_email
+    message["To"] = recipient
 
-        message.attach(MIMEText(plain_content, "plain"))
-        if html_content is not None:
-            message.attach(MIMEText(str(html_content), "html"))
-        
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_email, password)
-        server.sendmail(sender_email, recipient, message.as_string())
-        server.quit()
+    message.attach(MIMEText(plain_content, "plain"))
+    if html_content is not None:
+        message.attach(MIMEText(str(html_content), "html"))
+    
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(sender_email, password)
+    server.sendmail(sender_email, recipient, message.as_string())
+    server.quit()
 
 def update_leaderboard(referral_link, amount):
     leaderboard_ref = fireClient.collection("statistics").document("sales")
