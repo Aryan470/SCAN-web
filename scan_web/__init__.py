@@ -28,11 +28,14 @@ def create_app():
         app.register_blueprint(auth.auth, subdomain="auth")
         app.register_blueprint(info.info, subdomain="info")
         
+        app.static_folder = "static"
+        app.static_url_path = "/static"
         app.add_url_rule('/static/<path:filename>',
                  endpoint='static',
                  subdomain='static',
                  view_func=app.send_static_file)
-        app.config["STATIC_FOLDER"] = "static"
+        
+        
     else:
         app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
         app.register_blueprint(auth.auth, url_prefix="/auth")
