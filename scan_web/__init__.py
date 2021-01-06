@@ -29,10 +29,10 @@ def create_app():
         app.register_blueprint(info.info, subdomain="info")
         
         app.add_url_rule('/static/<path:filename>',
-                 endpoint='',
+                 endpoint='static',
                  subdomain='static',
                  view_func=app.send_static_file)
-        app.config["STATIC_FOLDER"] = "/static"
+        app.config["STATIC_FOLDER"] = "static"
     else:
         app.register_blueprint(bakesale.bakesale, url_prefix="/bakesale")
         app.register_blueprint(auth.auth, url_prefix="/auth")
