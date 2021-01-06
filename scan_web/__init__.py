@@ -25,7 +25,8 @@ def create_app():
         app.register_blueprint(bakesale.bakesale, subdomain="bakesale")
         app.register_blueprint(auth.auth, subdomain="auth")
         app.register_blueprint(info.info, subdomain="info")
-        app.add_url_rule('/static/<path:filename>',
+        app.config['STATIC_FOLDER'] = None
+        app.add_url_rule('/<path:filename>',
                  endpoint='static',
                  subdomain='static',
                  view_func=app.send_static_file)
