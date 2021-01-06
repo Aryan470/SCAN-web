@@ -26,7 +26,7 @@ def create_app():
         app.register_blueprint(auth.auth, subdomain="auth")
         app.register_blueprint(info.info, subdomain="info")
         app.add_url_rule('/static/<path:filename>',
-                 endpoint='/',
+                 endpoint='static',
                  subdomain='static',
                  view_func=app.send_static_file)
     else:
