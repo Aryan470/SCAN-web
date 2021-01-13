@@ -33,7 +33,7 @@ exec_referral_links = [
     "Alekhya_Vattikuti".lower(),
     "Aryan_Khatri".lower()
 ]
-admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1"]
+admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1", "cb1WKvzrlSXKOYv5sAjBz47A1Y62"]
 
 @bakesale.route("/reloadproducts")
 def load_product_data():
@@ -138,9 +138,9 @@ def submit_order():
         "fulfillment": fulfillment,
         "status": {
             "received": True,
+            "invoiced": False,
             "baked": False,
-            "delivered": False,
-            "collected": False
+            "delivered": False
         }
     }
 
@@ -152,20 +152,19 @@ def submit_order():
         if request.form["referral"] != "instagram":
             update_leaderboard(request.form["referral"].lower(), order["price"])
     
-    increment_count("received")
 
     fireClient.collection("orders").document(order["orderID"]).set(order)
 
-    # Send confirmation email now
-    orderURL = url_for("bakesale.show_order", orderID=order["orderID"], _external=True)
-    try:
-        send_mail(userInfo["email"], "SCAN Order Confirmation",
-            render_template("order_confirmation_email_plain.html", order=order, product_data=product_data, orderURL=orderURL),
-            html_content=render_template("order_confirmation_email.html", order=order, product_data=product_data, orderURL=orderURL))
-        flash("An email was sent to you containing a link to this order and its contents.")
-    except BaseException as e:
-        print("EMAIL ERROR:", e)
-        flash("An error occurred while sending an email, please save this link to access your order.")
+    # DO NOT send confirmation email
+    # orderURL = url_for("bakesale.show_order", orderID=order["orderID"], _external=True)
+    # try:
+    #     send_mail(userInfo["email"], "SCAN Order Confirmation",
+    #         render_template("order_confirmation_email_plain.html", order=order, product_data=product_data, orderURL=orderURL),
+    #         html_content=render_template("order_confirmation_email.html", order=order, product_data=product_data, orderURL=orderURL))
+    #     flash("An email was sent to you containing a link to this order and its contents.")
+    # except BaseException as e:
+    #     print("EMAIL ERROR:", e)
+    #     flash("An error occurred while sending an email, please save this link to access your order.")
     return redirect(url_for("bakesale.show_order", orderID=order["orderID"]))
 
 @bakesale.route("/leaderboard", methods=["GET"])
@@ -182,21 +181,27 @@ def show_order(orderID):
     
     view = request.args.get("view", default="customer")
     order_dict = order_obj.to_dict()
-    if view == "admin" and order_dict["status"]["collected"]:
-        order_dict["statusText"] = "Collected"
-    elif order_dict["status"]["delivered"]:
+
+    if order_dict["status"]["delivered"]:
         order_dict["statusText"] = "Delivered"
     elif order_dict["status"]["baked"]:
         order_dict["statusText"] = "Baked"
+    elif order_dict["status"]["invoiced"]:
+        order_dict["statusText"] = "Invoiced"
     else:
         order_dict["statusText"] = "Received"
 
-    if "uid" in session and view == "baker":
-        return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
-    elif "uid" in session and view == "delivery":
-        return render_template("single_order_delivery.html", order=order_dict, product_data=product_data)
-    elif "uid" in session and view == "admin" and session["uid"] in admin_uids:
-        return render_template("single_order_admin.html", order=order_dict, product_data=product_data)
+    if "uid" in session:
+        if view == "finance":
+            return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
+        elif view == "baker":
+            return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
+        elif view == "delivery":
+            return render_template("single_order_delivery.html", order=order_dict, product_data=product_data)
+        elif view == "admin" and session["uid"] in admin_uids:
+            return render_template("single_order_admin.html", order=order_dict, product_data=product_data)
+        
+    elif "uid" in session and 
     else:
         return render_template("single_order.html", order=order_dict, product_data=product_data)
 
@@ -207,9 +212,43 @@ def baker_view():
         return redirect(url_for("auth.login"))
     
     # load in all pending orders
-    pending_orders = fireClient.collection("orders").where("status.received", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()
+    pending_orders = fireClient.collection("orders").where("status.invoiced", "==", True).where("status.baked", "==", False).order_by("UTC_timestamp").stream()
 
     return render_template("baker_view.html", product_data=product_data, pending=[order.to_dict() for order in pending_orders])
+
+
+@bakesale.route("/invoiceitem", methods=["GET", "POST"])
+def invoice_item():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    if request.method == "GET":
+        return render_template("invoice_form.html", orderID=request.args.get("orderID"), price=request.args.get("price"))
+    
+    orderID = request.form["orderID"]
+    invoiceLink = request.form["invoiceLink"]
+
+    financeID = session["uid"]
+
+    if not orderID or not financeID:
+        abort(400, "Invoice request must include order ID and login")
+    
+    order_ref = fireClient.collection("orders").document(orderID)
+    order_obj = order_ref.get()
+    if not order_obj.exists:
+        abort(404, "Order not found")
+    order_dict = order_obj.to_dict()
+
+    order_dict["invoice"] = {
+        "link": invoiceLink,
+        "creator": financeID
+    }
+
+    order_dict["status"]["invoiced"] = True
+
+    order_ref.set(order_dict)
+    return redirect(url_for("bakesale.baker_view"))
+
 
 @bakesale.route("/bakeitem", methods=["GET", "POST"])
 def bake_item():
@@ -264,8 +303,6 @@ def bake_item():
         order_dict["baking"] = {
             "UTC_timestamp": str(datetime.utcnow()),
         }
-        increment_count("baked")
-        update_stats("received", "baked", order_dict["UTC_timestamp"], order_dict["baking"]["UTC_timestamp"])
     
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.baker_view"))
@@ -296,11 +333,6 @@ def deliver_item():
         },
         "UTC_timestamp": str(datetime.utcnow())
     }
-
-    increment_count("delivered")
-    update_stats("received", "delivered", order_dict["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
-    update_stats("baked", "delivered", order_dict["baking"]["UTC_timestamp"], order_dict["delivery"]["UTC_timestamp"])
-    increment_product_counts(order_dict["quantities"])
 
     order_ref.set(order_dict)
     return redirect(url_for("bakesale.delivery_view"))
@@ -340,43 +372,6 @@ def resolve_issue():
     order_ref.set(order)
     return redirect(url_for("bakesale.admin_view"))
 
-@bakesale.route("/collectitem", methods=["GET", "POST"])
-def collect_item():
-    if "uid" not in session or session["uid"] not in admin_uids:
-        return redirect(url_for("auth.login"))
-    
-    if request.method == "GET":
-        return render_template("collect_form.html", orderID=request.args.get("orderID"),
-        price=request.args.get("price"), deliverer={
-            "name": request.args.get("deliverer_name"),
-            "uid": request.args.get("deliverer_id")
-        })
-    
-    orderID = request.form["orderID"]
-    uid = session["uid"]
-
-    order_ref = fireClient.collection("orders").document(orderID)
-    order_obj = order_ref.get()
-    if not order_obj.exists:
-        abort(404, "Order not found")
-    
-    order_dict = order_obj.to_dict()
-    order_dict["status"]["collected"] = True
-    order_dict["collection"] = {
-        "collector": {
-            "uid": session["uid"],
-            "name": session["name"]
-        },
-        "UTC_timestamp": str(datetime.utcnow())
-    }
-    increment_count("collected")
-    update_stats("received", "collected", order_dict["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
-    update_stats("baked", "collected", order_dict["baking"]["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
-    update_stats("delivered", "collected", order_dict["delivery"]["UTC_timestamp"], order_dict["collection"]["UTC_timestamp"])
-
-    order_ref.set(order_dict)
-    return redirect(url_for("bakesale.admin_view"))
-
 
 @bakesale.route("/deliveryview", methods=["GET"])
 def delivery_view():
@@ -391,14 +386,13 @@ def admin_view():
     if "uid" not in session or session["uid"] not in admin_uids:
         return redirect(url_for("auth.login"))
     
-    delivered_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.delivered", "==", True).where("status.collected", "==", False).order_by("UTC_timestamp").stream()]
     issue_orders = [order.to_dict() for order in fireClient.collection("orders").where("has_unresolved_issues", "==", True).order_by("UTC_timestamp").stream()]
     return render_template("admin_view.html", delivered=delivered_orders, issue_orders=issue_orders)
 
-@bakesale.route("/adminview/collected", methods=["GET"])
-def admin_collected_view():
-    collected_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.collected", "==", True).order_by("UTC_timestamp").stream()]
-    return render_template("admin_collected_orders.html", collected=collected_orders)
+@bakesale.route("/adminview/delivered", methods=["GET"])
+def admin_delivered_view():
+    delivered_orders = [order.to_dict() for order in fireClient.collection("orders").where("status.delivered", "==", True).order_by("UTC_timestamp").stream()]
+    return render_template("admin_delivered_view.html", delivered=delivered_orders)
 
 
 @bakesale.route("/profile/<uid>", methods=["GET"])
@@ -441,39 +435,3 @@ def update_leaderboard(referral_link, amount):
     sales = leaderboard_ref.get().to_dict()
     sales["leaderboard"][referral_link] = sales["leaderboard"].get(referral_link, 0.0) + amount
     leaderboard_ref.set(sales)
-
-def increment_count(category):
-    count_ref = fireClient.collection("statistics").document("counts")
-    count_dict = count_ref.get().to_dict()
-    count_dict[category] += 1
-    count_ref.set(count_dict)
-
-def update_stats(start_category, end_category, start_timestamp, end_timestamp):
-    fmt = "%Y-%m-%d %H:%M:%S.%f"
-    start_datetime = datetime.strptime(start_timestamp, fmt)
-    end_datetime = datetime.strptime(end_timestamp, fmt)
-    # total seconds divided by seconds in a day
-    delta_days = (end_datetime - start_datetime).total_seconds() / (3600 * 24)
-
-    times_ref = fireClient.collection("statistics").document("times")
-    times = times_ref.get().to_dict()
-    times[start_category][end_category] += delta_days
-    times_ref.set(times)
-
-def increment_product_counts(order_quantities):
-    for category in order_quantities:
-        category_freqs_ref = fireClient.collection("statistics").document("frequencies").collection("categories").document(category)
-        category_obj = category_freqs_ref.get()
-        if category_obj.exists:
-            category_dict = category_obj.to_dict()
-        else:
-            category_dict = {}
-
-        for product_id in order_quantities[category]:
-            if order_quantities[category][product_id] > 0:
-                if product_id in category_dict:
-                    category_dict[product_id] += order_quantities[category][product_id]
-                else:
-                    category_dict[product_id] = order_quantities[category][product_id]
-        
-        category_freqs_ref.set(category_dict)

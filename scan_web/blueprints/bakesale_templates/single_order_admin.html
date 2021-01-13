@@ -17,12 +17,8 @@
             </ul>
             <br>
         {% endif %}
-        {% if order.collection is defined %}
-            <p><b>Collection Information:</b></p>
-            <ul>
-                <li>Collection by: <a href="{{url_for("info.view_profile", uid=order.collection.collector.uid)}}">{{order.collection.collector.name}}</a></li>
-                <li>Collection at: <span class="datetime">{{order.collection.UTC_timestamp}}</span<</li>
-            </ul>
+        {% if order.invoice is defined %}
+            <p><b>Invoice: </b> {{order.invoice.link}}</p>
             <br>
         {% endif %}
         {% if order.notes is defined %}

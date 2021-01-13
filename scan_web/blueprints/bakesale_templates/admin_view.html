@@ -5,35 +5,7 @@
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Admin View</h1>
-        <table border="1">
-            <caption><b>Uncollected Orders</b></caption>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Date Delivered</th>
-                <th>Time Delivered</th>
-                <th>Name</th>
-                <th>Deliverer</th>
-                <th>Amount</th>
-                <th>Link</th>
-            </tr>
-
-            {% for order in delivered %}
-                <tr>
-                    <td class="date">{{order.UTC_timestamp}}</td>
-                    <td class="time">{{order.UTC_timestamp}}</td>
-                    <td class="date">{{order.delivery.UTC_timestamp}}</td>
-                    <td class="time">{{order.delivery.UTC_timestamp}}</td>
-                    <td>{{order.userInfo.name}}</td>
-                    <td><a href="{{url_for("info.view_profile", uid=order.delivery.deliveredBy.uid)}}">{{order.delivery.deliveredBy.name}}</a></td>
-                    <td>${{'%0.2f' % order.price}}</td>
-                    <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="admin")}}>Click Me</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <h3>Statistics</h3>
-        <p>work in progress</p>
+        
         <br>
         <h3>Order Issues</h3>
             <table border=1>
@@ -59,7 +31,7 @@
                 {% endfor %}
             <table>
         <br><br>
-        <a href="{{url_for("bakesale.admin_collected_view")}}">View collected orders</a>
+        <a href="{{url_for("bakesale.admin_delivered_view")}}">View completed orders</a>
         <br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>

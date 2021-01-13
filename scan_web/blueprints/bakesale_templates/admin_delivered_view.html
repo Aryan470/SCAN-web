@@ -6,7 +6,7 @@
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>SCAN Admin View</h1>
         <table border="1">
-            <caption><b>Collected Orders</b></caption>
+            <caption><b>Delivered Orders</b></caption>
             <tr>
                 <th>UTC Timestamp</th>
                 <th>Price</th>
@@ -15,7 +15,7 @@
                 <th>Link</th>
             </tr>
 
-            {% for order in collected %}
+            {% for order in delivered %}
                 <tr>
                     <td>{{order.UTC_timestamp}}</td>
                     <td>${{'%0.2f' % order.price}}</td>
