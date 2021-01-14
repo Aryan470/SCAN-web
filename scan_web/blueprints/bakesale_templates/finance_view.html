@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>SCAN Finance View</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Finance View</h1>
+        <table border="1" id="ordertable">
+            <caption><b>Received Orders</b></caption>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Name</th>
+                <th>Link</th>
+            </tr>
+
+            {% for order in not_invoiced_orders %}
+                <tr>
+                    <!--loop through all date and time class tags and render them at the bottom of the page-->
+                    <td class="date">{{order.UTC_timestamp}}</td>
+                    <td class="time">{{order.UTC_timestamp}}</td>
+                    <td>{{order.userInfo.name}}</td>
+                    <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="finance")}}>Click Me</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="{{url_for("static", filename="render_times.js")}}"></script>
+    </body>
+</html>

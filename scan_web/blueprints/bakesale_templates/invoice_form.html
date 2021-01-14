@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>SCAN Invoicing Form</title>
+    </head>
+    <body>
+        <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
+        <h1>SCAN Invoicing Form</h1>
+
+
+        <form action="{{url_for("bakesale.invoice_item")}}" method="POST">
+            <input type="hidden" name="orderID" value={{orderID}}></input>
+            <input type="url" name="invoiceLink" placeholder="Enter the invoice link"></input>
+
+            <br>
+            <p>Please ensure the amount of the invoice is: ${{'%0.2f' % price|float()}}</p>
+            <br>
+            
+            <input type="submit" value="Submit Invoice"></input>
+        </form>
+
+        <br><br>
+        <a href="{{url_for("bakesale.index")}}">Back to home</a>
+        <br>
+        <a href="{{url_for("auth.logout")}}">Logout</a>
+    </body>
+</html>

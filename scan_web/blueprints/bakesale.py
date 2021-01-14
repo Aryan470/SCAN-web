@@ -33,7 +33,7 @@ exec_referral_links = [
     "Alekhya_Vattikuti".lower(),
     "Aryan_Khatri".lower()
 ]
-admin_uids = ["lvWXZdOLvFOZVo8xiO1hKo1P1tu1", "cb1WKvzrlSXKOYv5sAjBz47A1Y62"]
+admin_uids = {"lvWXZdOLvFOZVo8xiO1hKo1P1tu1", "cb1WKvzrlSXKOYv5sAjBz47A1Y62"}
 
 @bakesale.route("/reloadproducts")
 def load_product_data():
@@ -193,17 +193,14 @@ def show_order(orderID):
 
     if "uid" in session:
         if view == "finance":
-            return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
+            return render_template("single_order_finance.html", order=order_dict, product_data=product_data)
         elif view == "baker":
             return render_template("single_order_baker.html", order=order_dict, product_data=product_data)
         elif view == "delivery":
             return render_template("single_order_delivery.html", order=order_dict, product_data=product_data)
         elif view == "admin" and session["uid"] in admin_uids:
             return render_template("single_order_admin.html", order=order_dict, product_data=product_data)
-        
-    elif "uid" in session and 
-    else:
-        return render_template("single_order.html", order=order_dict, product_data=product_data)
+    return render_template("single_order.html", order=order_dict, product_data=product_data)
 
 @bakesale.route("/baker_view", methods=["GET"])
 def baker_view():
@@ -216,6 +213,15 @@ def baker_view():
 
     return render_template("baker_view.html", product_data=product_data, pending=[order.to_dict() for order in pending_orders])
 
+
+@bakesale.route("/finance_view", methods=["GET"])
+def finance_view():
+    if "uid" not in session:
+        return redirect(url_for("auth.login"))
+    
+    not_invoiced_orders = fireClient.collection("orders").where("status.invoiced", "==", False).order_by("UTC_timestamp").stream()
+
+    return render_template("finance_view.html", not_invoiced_orders=[order.to_dict() for order in not_invoiced_orders])
 
 @bakesale.route("/invoiceitem", methods=["GET", "POST"])
 def invoice_item():
@@ -237,7 +243,11 @@ def invoice_item():
     order_obj = order_ref.get()
     if not order_obj.exists:
         abort(404, "Order not found")
+
     order_dict = order_obj.to_dict()
+
+    if order_dict["status"]["invoiced"] or "invoice" in order_dict:
+        abort(400, "Order already invoiced")
 
     order_dict["invoice"] = {
         "link": invoiceLink,
@@ -247,7 +257,7 @@ def invoice_item():
     order_dict["status"]["invoiced"] = True
 
     order_ref.set(order_dict)
-    return redirect(url_for("bakesale.baker_view"))
+    return redirect(url_for("bakesale.finance_view"))
 
 
 @bakesale.route("/bakeitem", methods=["GET", "POST"])
@@ -387,7 +397,7 @@ def admin_view():
         return redirect(url_for("auth.login"))
     
     issue_orders = [order.to_dict() for order in fireClient.collection("orders").where("has_unresolved_issues", "==", True).order_by("UTC_timestamp").stream()]
-    return render_template("admin_view.html", delivered=delivered_orders, issue_orders=issue_orders)
+    return render_template("admin_view.html", issue_orders=issue_orders)
 
 @bakesale.route("/adminview/delivered", methods=["GET"])
 def admin_delivered_view():

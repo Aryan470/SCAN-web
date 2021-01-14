@@ -35,6 +35,11 @@
         {% endif %}
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
+
+        {% if order.invoice is defined %}
+            <p><b>Invoice: </b> <a href="{{order.invoice.link}}">{{order.invoice.link}}</a></p><br>
+        {% endif}
+
         {% if order.delivery is defined %}
             <a href={{url_for("bakesale.collect_item", orderID=order.orderID, price=order.price, deliverer_id=order.delivery.deliveredBy.uid, deliverer_name=order.delivery.deliveredBy.name)}}><h2>Collect this</h2></a>
         {% endif %}

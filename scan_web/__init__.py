@@ -14,7 +14,6 @@ from scan_web.blueprints import bakesale, auth, sms, info
 def create_app():
     app = Flask(__name__, static_folder=None if os.environ["CONTEXT"] == "PROD" else "static")
 
-
     app.config["PREFERRED_URL_SCHEME"] = "https"
     if os.environ["CONTEXT"] == "PROD":
         app.config["SERVER_NAME"] = "sicklecellawareness.net"

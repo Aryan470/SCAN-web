@@ -32,6 +32,11 @@
         <a href="{{url_for("bakesale.report_issue", orderID=order.orderID, view=request.args.get("view"))}}">Report an issue</a>
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
+
+        {% if order.invoice is defined %}
+            <p><b>Invoice: </b> <a href="{{order.invoice.link}}">{{order.invoice.link}}</a></p><br>
+        {% endif %}
+
         <h3>Ordered Items:</h3>
         {% for category in order.quantities %}
             <h5>{{product_data[category].name}}</h5>
