@@ -23,6 +23,11 @@
         <a href="{{url_for("bakesale.report_issue", orderID=order.orderID, view=request.args.get("view"))}}">Report an issue</a>
         <p><b>Total Price:</b> ${{'%0.2f' % order.price}}</p>
         <p><b>Order ID:</b> {{order.orderID}}</p>
+
+        {% if order.invoice is defined %}
+            <p><b>Invoice: </b> <a href="{{order.invoice.link}}">{{order.invoice.link}}</a></p><br>
+        {% endif %}
+
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
             <h5>{{product_data[category].name}}</h5>
@@ -31,8 +36,7 @@
                 <li>{{product_data[category].products[item].name}}:
                  {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
                 (<a href={{url_for("bakesale.bake_item", orderID=order.orderID, itemCategory=category,
-                itemID=item, qtyMax=(order.quantities[category][item] - order.fulfillment[category][item].count))}}>
-                Bake this</a>)</li>
+                itemID=item, qtyMax=(order.quantities[category][item] - order.fulfillment[category][item].count))}}>Bake this</a>)</li>
             {% endfor %}
             </ul>
         {% endfor %}

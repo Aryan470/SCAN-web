@@ -1,11 +1,11 @@
 <html>
     <head>
-        <title>SCAN Bake Sale Order (Delivery View)</title>
+        <title>SCAN Bake Sale Order (Finance View)</title>
     </head>
 
     <body>
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
-        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Delivery View)</h1>
+        <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Finance View)</h1>
         <h2>Order Info</h2>
         <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}}</span></p>
         <p><b>Status:</b> {{order.statusText}}</p>
@@ -27,22 +27,16 @@
         {% if order.invoice is defined %}
             <p><b>Invoice: </b> <a href="{{order.invoice.link}}">{{order.invoice.link}}</a></p><br>
         {% endif %}
-        
-        <a href={{url_for("bakesale.deliver_item", orderID=order.orderID, address=order.userInfo.address, price=order.price)}}><h2>Deliver this</h2></a>
+
+        <a href={{url_for("bakesale.invoice_item", orderID=order.orderID, price=order.price)}}><h2>Submit invoice</h2></a>
+
         <h3>Ordered Items:</h3>
         {% for category in order.fulfillment %}
             <h5>{{product_data[category].name}}</h5>
             <ul>
             {% for item in order.fulfillment[category] %}
                 <li>{{product_data[category].products[item].name}}:
-                    {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
-                    <ul>
-                        {% for baker in order.fulfillment[category][item].bakers %}
-                            <li>
-                                <a href="{{url_for("info.view_profile", uid=baker)}}">{{order.fulfillment[category][item].bakers[baker].name}}</a>: {{order.fulfillment[category][item].bakers[baker].count}}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                 {{order.fulfillment[category][item].count}} / {{order.quantities[category][item]}}
                 </li>
             {% endfor %}
             </ul>
@@ -54,7 +48,7 @@
         <p><b>Email Address:</b> {{order.userInfo.email}}</p>
         <p><b>Address:</b> {{order.userInfo.address}}</p>
         <br><br>
-        <a href="{{url_for("bakesale.delivery_view")}}">Back to delivery view</a>
+        <a href="{{url_for("bakesale.finance_view")}}">Back to finance view</a>
         <br>
         <a href="{{url_for("bakesale.index")}}">Back to home</a>
         <br>
