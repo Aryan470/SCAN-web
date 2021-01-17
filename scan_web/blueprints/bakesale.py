@@ -431,16 +431,21 @@ def send_mail(recipient, subject, plain_content, html_content=None):
     message["Subject"] = subject
     message["From"] = sender_email
     message["To"] = recipient
-    message["Cc"] = ["info@sicklecellawareness.net"]
+
+    cc_recipients = ["info@sicklecellawareness.net"]
+
+    message["Cc"] = ", ".join(cc_recipients)
 
     message.attach(MIMEText(plain_content, "plain"))
     if html_content is not None:
         message.attach(MIMEText(str(html_content), "html"))
     
+    print(recipient + cc_recipients)
+
     server = smtplib.SMTP(smtp_server, port)
     server.starttls()
     server.login(sender_email, os.environ["EMAIL_PASS"])
-    server.sendmail(sender_email, recipient, message.as_string())
+    server.sendmail(sender_email, [recipient] + cc_recipients, message.as_string())
     server.quit()
 
 def update_leaderboard(referral_link, amount):
