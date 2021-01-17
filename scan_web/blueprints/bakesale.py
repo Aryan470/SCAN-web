@@ -434,7 +434,7 @@ def send_mail(recipient, subject, plain_content, html_content=None):
 
     cc_recipients = ["info@sicklecellawareness.net"]
 
-    message["Cc"] = ", ".join(cc_recipients)
+    message["Cc"] = ",".join(cc_recipients)
 
     message.attach(MIMEText(plain_content, "plain"))
     if html_content is not None:
@@ -445,7 +445,7 @@ def send_mail(recipient, subject, plain_content, html_content=None):
     server = smtplib.SMTP(smtp_server, port)
     server.starttls()
     server.login(sender_email, os.environ["EMAIL_PASS"])
-    server.sendmail(sender_email, [recipient] + cc_recipients, message.as_string())
+    server.sendmail(sender_email, ",".join([recipient] + cc_recipients), message.as_string())
     server.quit()
 
 def update_leaderboard(referral_link, amount):
