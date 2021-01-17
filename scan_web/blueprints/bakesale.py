@@ -159,14 +159,18 @@ def submit_order():
 
     # DO NOT send confirmation email
     orderURL = url_for("bakesale.show_order", orderID=order["orderID"], _external=True)
-    try:
-        send_mail(userInfo["email"], "SCAN Order Confirmation",
+    send_mail(userInfo["email"], "SCAN Order Confirmation",
             render_template("order_confirmation_email_plain.html", order=order, product_data=product_data, orderURL=orderURL),
             html_content=render_template("order_confirmation_email.html", order=order, product_data=product_data, orderURL=orderURL))
-        flash("An email was sent to you containing a link to this order and its contents.")
-    except BaseException as e:
-        print("EMAIL ERROR:", e)
-        flash("An error occurred while sending an email, please save this link to access your order.")
+    flash("An email was sent to you containing a link to this order and its contents.")
+    #try:
+    #    send_mail(userInfo["email"], "SCAN Order Confirmation",
+    #        render_template("order_confirmation_email_plain.html", order=order, product_data=product_data, orderURL=orderURL),
+    #        html_content=render_template("order_confirmation_email.html", order=order, product_data=product_data, orderURL=orderURL))
+    #    flash("An email was sent to you containing a link to this order and its contents.")
+    #except BaseException as e:
+    #    print("EMAIL ERROR:", e)
+    #    flash("An error occurred while sending an email, please save this link to access your order.")
     
     return redirect(url_for("bakesale.show_order", orderID=order["orderID"]))
 
@@ -440,7 +444,7 @@ def send_mail(recipient, subject, plain_content, html_content=None):
     if html_content is not None:
         message.attach(MIMEText(str(html_content), "html"))
     
-    print(str(recipient + cc_recipients))
+    print(str([recipient] + cc_recipients))
 
     server = smtplib.SMTP(smtp_server, port)
     server.starttls()
