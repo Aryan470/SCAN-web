@@ -440,7 +440,7 @@ def send_mail(recipient, subject, plain_content, html_content=None):
     if html_content is not None:
         message.attach(MIMEText(str(html_content), "html"))
     
-    print(recipient + cc_recipients)
+    print(str(recipient + cc_recipients))
 
     server = smtplib.SMTP(smtp_server, port)
     server.starttls()
