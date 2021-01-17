@@ -11,6 +11,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Name</th>
+                <th>Branch</th>
                 <th>Link</th>
             </tr>
 
@@ -20,6 +21,7 @@
                     <td class="date">{{order.UTC_timestamp}}</td>
                     <td class="time">{{order.UTC_timestamp}}</td>
                     <td>{{order.userInfo.name}}</td>
+                    <td>{{order.branch}}</td>
                     <td><a href={{url_for("bakesale.show_order", orderID=order.orderID, view="finance")}}>Click Me</a></td>
                 </tr>
             {% endfor %}
