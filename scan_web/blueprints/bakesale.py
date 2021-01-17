@@ -426,7 +426,7 @@ def send_mail(recipient, subject, plain_content, html_content=None):
         # don't send emails if we are not in production
         return
     
-    port = 465
+    port = 587
     smtp_server = "smtp.dreamhost.com"
 
     sender_email = os.environ["EMAIL"]
