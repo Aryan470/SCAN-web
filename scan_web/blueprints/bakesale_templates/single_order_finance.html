@@ -7,6 +7,7 @@
         <p id="authname" style="vertical-align: top; float: right"><b>Logged in as:</b> <a href="{{url_for("info.edit_profile")}}">{{session["name"]}}</a></p>
         <h1>{{order.userInfo.name}}'s SCAN Bake Sale Order (Finance View)</h1>
         <h2>Order Info</h2>
+        <p><b>Branch:</b> {{order.branch}}</p>
         <p><b>Received On:</b> <span class="datetime">{{order.UTC_timestamp}}</span></p>
         <p><b>Status:</b> {{order.statusText}}</p>
         {% if order.delivery is defined %}

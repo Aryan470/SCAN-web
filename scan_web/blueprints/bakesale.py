@@ -34,6 +34,7 @@ exec_referral_links = [
     "Aryan_Khatri".lower()
 ]
 admin_uids = {"lvWXZdOLvFOZVo8xiO1hKo1P1tu1", "cb1WKvzrlSXKOYv5sAjBz47A1Y62"}
+branches = ["Frisco", "Allen"]
 
 @bakesale.route("/reloadproducts")
 def load_product_data():
@@ -97,8 +98,8 @@ def report_issue():
 @bakesale.route("/orderform", methods=["GET"])
 def orderform():
     if "referral" in request.args:
-        return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"))
-    return render_template("orderform.html", product_data=product_data, number_names=number_names)
+        return render_template("orderform.html", product_data=product_data, number_names=number_names, referral=request.args.get("referral"), branches=branches)
+    return render_template("orderform.html", product_data=product_data, number_names=number_names, branches=branches)
 
 @bakesale.route("/submit_order", methods=["POST"])
 def submit_order():
@@ -136,6 +137,7 @@ def submit_order():
         "UTC_timestamp": str(datetime.utcnow()),
         "orderID": str(uuid4()),
         "fulfillment": fulfillment,
+        "branch": request.form.get("branch", "N/A"),
         "status": {
             "received": True,
             "invoiced": False,
